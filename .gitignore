@@ -19,3 +19,4 @@ geckodriver.log
 
 configs/public
 configs/private
+/typesense-server-data/

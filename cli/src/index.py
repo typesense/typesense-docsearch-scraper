@@ -19,10 +19,6 @@ from .commands.run_config import RunConfig
 from .commands.deploy_docker_scraper_images import DeployDockerScraperImages
 from .commands.deploy_config import DeployConfig
 from .commands.run_config_docker import RunConfigDocker
-from .commands.generate_email import GenerateEmail
-from .commands.modify_emails import UpdateEmails, DeleteEmails
-from .commands.invite_user import InviteUser
-from .commands.invite_removeuser import InviteRemoveUser
 
 if not path.isfile(env_file):
     print("")
@@ -30,11 +26,11 @@ if not path.isfile(env_file):
 
     f = open(env_file, "w")
 
-    ans = input("What is your Algolia APPLICATION_ID: ")
-    f.write("APPLICATION_ID=" + ans + "\n")
+    ans = input("What is your TYPESENSE_COLLECTION_ALIAS_NAME: ")
+    f.write("TYPESENSE_COLLECTION_ALIAS_NAME=" + ans + "\n")
 
-    ans = input("What is your Algolia API_KEY: ")
-    f.write("API_KEY=" + ans + "\n")
+    ans = input("What is your TYPESENSE_API_KEY: ")
+    f.write("TYPESENSE_API_KEY=" + ans + "\n")
 
     f.close()
 
@@ -42,17 +38,13 @@ if not path.isfile(env_file):
 
 load_dotenv(env_file)
 
-ADMIN = True
-CREDENTIALS = True
+REQUIRED_CONFIGS = True
 
-if "APPLICATION_ID" not in environ or len(environ["APPLICATION_ID"]) == 0:
-    CREDENTIALS = False
+if "TYPESENSE_COLLECTION_ALIAS_NAME" not in environ or len(environ["TYPESENSE_COLLECTION_ALIAS_NAME"]) == 0:
+    REQUIRED_CONFIGS = False
 
-if "API_KEY" not in environ or len(environ["API_KEY"]) == 0:
-    CREDENTIALS = False
-
-if "APPLICATION_ID_PROD_INTERNAL" not in environ or len(environ["APPLICATION_ID_PROD_INTERNAL"]) == 0:
-    ADMIN = False
+if "TYPESENSE_API_KEY" not in environ or len(environ["TYPESENSE_API_KEY"]) == 0:
+    REQUIRED_CONFIGS = False
 
 cmds = []
 
@@ -61,19 +53,10 @@ cmds.append(BuildDockerScraper())
 cmds.append(RunTests())
 cmds.append(PlaygroundConfig())
 
-if CREDENTIALS:
-    cmds.append(RunConfig())
-    cmds.append(RunConfigDocker())
-
-if ADMIN:
-    cmds.append(GenerateEmail())
-    cmds.append(DeployConfig())
-    cmds.append(DeployDockerScraperImages())
-    cmds.append(UpdateEmails())
-    cmds.append(DeleteEmails())
-    cmds.append(InviteUser())
-    cmds.append(InviteRemoveUser())
-
+cmds.append(RunConfig())
+cmds.append(RunConfigDocker())
+cmds.append(DeployConfig())
+cmds.append(DeployDockerScraperImages())
 
 def print_usage(no_ansi=False):
     printer("Docsearch CLI", 1, no_ansi)
