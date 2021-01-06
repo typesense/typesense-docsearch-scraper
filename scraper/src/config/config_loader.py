@@ -10,6 +10,7 @@ from distutils.util import strtobool
 import json
 import os
 import copy
+from datetime import datetime
 
 from .config_validator import ConfigValidator
 from .nb_hits_updater import NbHitsUpdater
@@ -114,7 +115,8 @@ class ConfigLoader:
         if self.update_nb_hits is not None:
             self.update_nb_hits = bool(strtobool(self.update_nb_hits))
         if self.index_name_tmp is None:
-            self.index_name_tmp = os.environ.get('INDEX_NAME_TMP', self.index_name + '_tmp')
+            self.index_name_tmp = os.environ.get('INDEX_NAME_TMP',
+                                                 f'{self.index_name}_{int(datetime.now().timestamp())}')
 
         # Parse config
         self.selectors = SelectorsParser().parse(self.selectors)
