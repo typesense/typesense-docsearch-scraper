@@ -32,6 +32,15 @@ if not path.isfile(env_file):
     ans = input("What is your TYPESENSE_API_KEY: ")
     f.write("TYPESENSE_API_KEY=" + ans + "\n")
 
+    ans = input("What is your TYPESENSE_HOST: ")
+    f.write("TYPESENSE_HOST=" + ans + "\n")
+
+    ans = input("What is your TYPESENSE_PORT: ")
+    f.write("TYPESENSE_PORT=" + ans + "\n")
+
+    ans = input("What is your TYPESENSE_PROTOCOL (http|https): ")
+    f.write("TYPESENSE_PROTOCOL=" + ans + "\n")
+
     f.close()
 
     print("")

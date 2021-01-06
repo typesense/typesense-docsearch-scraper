@@ -5,6 +5,7 @@ import typesense
 from typesense import exceptions
 import json
 from builtins import range
+import os
 
 
 class TypesenseHelper:
@@ -12,11 +13,11 @@ class TypesenseHelper:
 
     def __init__(self, alias_name, collection_name_tmp):
         self.typesense_client = typesense.Client({
-            'api_key': 'xyz',
+            'api_key': os.environ.get('TYPESENSE_API_KEY', None),
             'nodes': [{
-                'host': 'localhost',
-                'port': '8108',
-                'protocol': 'http'
+                'host': os.environ.get('TYPESENSE_HOST', None),
+                'port': os.environ.get('TYPESENSE_PORT', None),
+                'protocol': os.environ.get('TYPESENSE_PROTOCOL', None)
             }]
         })
         self.alias_name = alias_name
