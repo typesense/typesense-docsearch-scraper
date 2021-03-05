@@ -24,11 +24,11 @@ class BuildDockerScraper(AbstractBuildDocker):
 
         if test:
             return self.build_docker_file("scraper/dev/docker/Dockerfile.test",
-                                          "algolia/docsearch-scraper-test",
+                                          "typesense/docsearch-scraper-test",
                                           local_tag=local_tag)
 
         code = self.build_docker_file("scraper/dev/docker/Dockerfile.base",
-                                      "algolia/docsearch-scraper-base",
+                                      "typesense/docsearch-scraper-base",
                                       local_tag=local_tag)
 
         if code != 0:
@@ -38,4 +38,4 @@ class BuildDockerScraper(AbstractBuildDocker):
         if code != 0:
             return code
         return self.build_docker_file("scraper/dev/docker/Dockerfile",
-                                      "algolia/docsearch-scraper", local_tag=local_tag)
+                                      "typesense/docsearch-scraper", local_tag=local_tag)

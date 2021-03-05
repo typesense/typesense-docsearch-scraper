@@ -42,10 +42,10 @@ class RunConfigDocker(AbstractCommand):
 
         if from_local_code:
             container_name = "docsearch-scraper-dev"
-            image_name = "algolia/docsearch-scraper-dev"
+            image_name = "typesense/docsearch-scraper-dev"
         else:
             container_name = "docsearch-scraper"
-            image_name = "algolia/docsearch-scraper"
+            image_name = "typesense/docsearch-scraper"
 
         run_command = [
             "docker",

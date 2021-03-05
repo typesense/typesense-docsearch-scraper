@@ -36,7 +36,7 @@ class RunTests(AbstractCommand):
                 "--name",
                 "docsearch-scraper-test",
                 "-t",
-                "algolia/docsearch-scraper-test"]
+                "typesense/docsearch-scraper-test"]
             return self.exec_shell_command(run_command)
         test_command = ["pytest", "./scraper/src"]
 

@@ -3,7 +3,7 @@ from .abstract_command import AbstractCommand
 
 class AbstractBuildDocker(AbstractCommand):
     @staticmethod
-    def build_docker_file(file, image="algolia/docsearch-scraper-dev",
+    def build_docker_file(file, image="typesense/docsearch-scraper-dev",
                           local_tag=False):
         tags = [image]
 

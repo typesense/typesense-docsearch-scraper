@@ -1,5 +1,5 @@
-FROM algolia/docsearch-scraper-base
-LABEL maintainer="docsearch@algolia.com"
+FROM typesense/docsearch-scraper-base
+LABEL maintainer="contact@typesense.org"
 
 WORKDIR /root
 COPY scraper/src ./src
