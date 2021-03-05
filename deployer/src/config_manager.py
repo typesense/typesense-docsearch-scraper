@@ -1,4 +1,3 @@
-import algoliasearch
 from os import environ
 
 from . import algolia_helper
@@ -7,7 +6,7 @@ from . import emails
 from . import helpers
 from . import fetchers
 
-from .helpdesk_helper import add_note, get_conversation_with_threads, \
+from .helpdesk_helper import add_draft, get_conversation_with_threads, \
     get_emails_from_conversation, get_conversation_url_from_cuid
 
 from deployer.src.algolia_internal_api import remove_user_from_index
@@ -100,14 +99,15 @@ class ConfigManager:
 
                 # Add email(s) to the private config & grant access
                 conversation_with_threads = get_conversation_with_threads(cuid)
-                emails_from_conv = get_emails_from_conversation(conversation_with_threads)
+                emails_from_conv = get_emails_from_conversation(
+                    conversation_with_threads)
                 analytics_statuses = emails.add(config_name, self.private_dir,
                                                 emails_to_add=emails_from_conv)
 
                 note_content = snippeter.get_email_for_config(config_name,
                                                               analytics_statuses)
 
-                add_note(cuid, note_content)
+                add_draft(cuid, note_content)
 
                 print(
                     'Email address fetched and stored, conversation updated and available at {}\n'.format(
@@ -127,11 +127,8 @@ class ConfigManager:
         def update_config(self, config_name):
             message = config_name
 
-            try:
-                key = algolia_helper.get_docsearch_key(config_name)
-                message = message + ' (' + key + ')'
-            except algoliasearch.helpers.AlgoliaException:
-                pass
+            key = algolia_helper.get_docsearch_key(config_name)
+            message = message + ' (' + key + ')'
 
             print(message)
 
