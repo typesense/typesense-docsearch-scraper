@@ -18,6 +18,5 @@ update.sh
 geckodriver.log
 .vscode/
 
-configs/public
 configs/private
 /typesense-server-data/

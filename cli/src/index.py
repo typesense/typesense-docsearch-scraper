@@ -26,9 +26,6 @@ if not path.isfile(env_file):
 
     f = open(env_file, "w")
 
-    ans = input("What is your TYPESENSE_COLLECTION_ALIAS_NAME: ")
-    f.write("TYPESENSE_COLLECTION_ALIAS_NAME=" + ans + "\n")
-
     ans = input("What is your TYPESENSE_API_KEY: ")
     f.write("TYPESENSE_API_KEY=" + ans + "\n")
 
@@ -48,9 +45,6 @@ if not path.isfile(env_file):
 load_dotenv(env_file)
 
 REQUIRED_CONFIGS = True
-
-if "TYPESENSE_COLLECTION_ALIAS_NAME" not in environ or len(environ["TYPESENSE_COLLECTION_ALIAS_NAME"]) == 0:
-    REQUIRED_CONFIGS = False
 
 if "TYPESENSE_API_KEY" not in environ or len(environ["TYPESENSE_API_KEY"]) == 0:
     REQUIRED_CONFIGS = False
