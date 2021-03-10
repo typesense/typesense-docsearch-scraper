@@ -37,6 +37,13 @@ class TypesenseHelper:
                 {'name': 'content', 'type': 'string', 'optional': True},
                 {'name': 'url', 'type': 'string', 'facet': True},
                 {'name': 'version', 'type': 'string', 'facet': True},
+                {'name': 'hierarchy.lvl0', 'type': 'string', 'facet': True, 'optional': True},
+                {'name': 'hierarchy.lvl1', 'type': 'string', 'facet': True, 'optional': True},
+                {'name': 'hierarchy.lvl2', 'type': 'string', 'facet': True, 'optional': True},
+                {'name': 'hierarchy.lvl3', 'type': 'string', 'facet': True, 'optional': True},
+                {'name': 'hierarchy.lvl4', 'type': 'string', 'facet': True, 'optional': True},
+                {'name': 'hierarchy.lvl5', 'type': 'string', 'facet': True, 'optional': True},
+                {'name': 'hierarchy.lvl6', 'type': 'string', 'facet': True, 'optional': True},
                 {'name': 'item_priority', 'type': 'int64'},
             ],
             'default_sorting_field': 'item_priority'
@@ -83,4 +90,11 @@ class TypesenseHelper:
         transformed_record['item_priority'] = transformed_record['weight']['page_rank'] * 1000000000 + \
                                               transformed_record['weight']['level'] * 1000 + \
                                               transformed_record['weight']['position']
+
+        # Flatten nested hierarchy field
+        for x in range(0, 7):
+            if record['hierarchy'][f'lvl{x}'] is None:
+                continue
+            transformed_record[f'hierarchy.lvl{x}'] = record['hierarchy'][f'lvl{x}']
+
         return transformed_record
