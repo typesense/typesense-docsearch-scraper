@@ -4,6 +4,12 @@ This is a fork of Algolia's awesome [DocSearch Scraper](https://github.com/algol
 
 You'd typically setup this scraper to run on your documentation site, and then use [typesense-docsearch.js](https://github.com/typesense/typesense-docsearch.js) to add a search bar to your site. 
 
+#### What is Typesense? 
+
+If you're new to Typesense, it is an **open source** search engine that is simple to use, run and scale, with clean APIs and documentation. 
+
+Think of it as an open source alternative to Algolia and an easier-to-use, batteries-included alternative to ElasticSearch. Get a quick overview from [this guide](https://typesense.org/guide/).
+
 ## Usage
 
 #### Step 1: Create a DocSearch Config File
