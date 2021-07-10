@@ -1,34 +1,41 @@
-# DocSearch scraper
+# Typesense DocSearch scraper
 
-This repository holds the code of the DocSearch scraper used to power the hosted
-version of DocSearch.
+This is a fork of Algolia's awesome [DocSearch Scraper](https://github.com/algolia/docsearch-scraper), customized to index data in [Typesense](https://typesense.org). 
 
-If you're looking for a way to add DocSearch to your site, the easiest solution
-is to [apply to DocSearch][1]. To run the scraper yourself, you're at the right
-place.
+You'd typically setup this scraper to run on your documentation site, and then use [typesense-docsearch.js](https://github.com/typesense/typesense-docsearch.js) to add a search bar to your site. 
 
-## Installation and Usage
+## Usage
 
-Please check the [dedicated documentation][2] to see how you can install and
-run DocSearch yourself.
+#### Step 1: Create a Docsearch Config File
 
-This project supports Python 3.6+
+[This repo](https://github.com/algolia/docsearch-configs/tree/master/configs) contains several Docsearch configuration files used by different documentation sites and [here's](https://github.com/typesense/typesense-website/blob/master/docs-site/docsearch.config.js) Typesense Documentation Site's docsearch config.
 
-## Related projects
+Using one of them as templates, create your own `config.js` pointing to your documentation site.
 
-DocSearch is made of 4 repositories:
+#### Step 2: Run the Scraper
 
-- [algolia/DocSearch][3] contains the `docsearch.js` code source.
-- [algolia/docsearch-configs][4] contains the JSON files representing all the
-  configurations for all the documentations DocSearch is powering.
-- [algolia/docsearch-scraper][5] contains the scraper we use to extract data
-  from your documentation. The code is open source and you can run it from a
-  Docker image.
-- [algolia/docsearch-website][6] contains the documentation website.
+The easiest way to run the scraper is using Docker.
 
-[1]: https://docsearch.algolia.com/
-[2]: https://docsearch.algolia.com/docs/run-your-own
-[3]: https://github.com/algolia/docsearch
-[4]: https://github.com/algolia/docsearch-configs
-[5]: https://github.com/algolia/docsearch-scraper
-[6]: https://github.com/algolia/docsearch-website
+1. [Install Docker](https://docs.docker.com/get-docker/)
+2. [Install jq](https://stedolan.github.io/jq/download/)
+3. Create a `.env` file with the following contents:
+    ```
+    TYPESENSE_API_KEY=xyz      # Replace with your Typesense admin key
+    TYPESENSE_HOST=localhost   # Replace with your Typesense host
+    TYPESENSE_PORT=8108        # Replace with the port you are running Typesense on (443 for Typesense Cloud)
+    TYPESENSE_PROTOCOL=http    # Use https for production deployments (https for Typesense Cloud)
+    ```
+4. Run the scraper:
+    ```shellsession
+    docker run -it --env-file=/path/to/your/.env -e "CONFIG=$(cat /path/to/your/config.json | jq -r tostring)" typesense/docsearch-scraper
+    ```
+
+This will scrape your documentation site and index it into Typesense.
+
+#### Step 3: Add typesense-docsearch.js to your documentation site
+
+Head over to [typesense-docsearch.js](https://github.com/typesense/typesense-docsearch.js) for instructions on how to setup a search bar in your documentation site, that uses the data this scraper indexes into your Typesense cluster.
+
+## Help
+
+If you have any questions or run into any problems, please create a Github issue and we'll try our best to help.
