@@ -36,7 +36,7 @@ class TypesenseHelper:
                 {'name': 'anchor', 'type': 'string', 'optional': True},
                 {'name': 'content', 'type': 'string', 'optional': True},
                 {'name': 'url', 'type': 'string', 'facet': True},
-                {'name': 'version', 'type': 'string', 'facet': True},
+                {'name': 'version', 'type': 'string[]', 'facet': True, 'optional': True},
                 {'name': 'hierarchy.lvl0', 'type': 'string', 'facet': True, 'optional': True},
                 {'name': 'hierarchy.lvl1', 'type': 'string', 'facet': True, 'optional': True},
                 {'name': 'hierarchy.lvl2', 'type': 'string', 'facet': True, 'optional': True},
