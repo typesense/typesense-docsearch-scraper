@@ -45,6 +45,21 @@ This will scrape your documentation site and index it into Typesense.
 
 Head over to [typesense-docsearch.js](https://github.com/typesense/typesense-docsearch.js) for instructions on how to setup a search bar in your documentation site, that uses the data this scraper indexes into your Typesense cluster.
 
+## Development Workflow
+
+This section only applies if you're making changes to this scraper itself. If you only need to run the scraper, see Usage instructions above.
+
+#### Releasing a new version
+
+```shellsession
+$ pipenv shell
+$ ./docsearch docker:build
+$ git tag -a 0.2.1 -m "0.2.1"
+$ ./docsearch deploy:scraper
+$ git push --follow-tags
+
+```
+
 ## Help
 
 If you have any questions or run into any problems, please create a Github issue and we'll try our best to help.
