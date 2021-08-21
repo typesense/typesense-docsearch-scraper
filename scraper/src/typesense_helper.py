@@ -44,6 +44,9 @@ class TypesenseHelper:
                 {'name': 'hierarchy.lvl4', 'type': 'string', 'facet': True, 'optional': True},
                 {'name': 'hierarchy.lvl5', 'type': 'string', 'facet': True, 'optional': True},
                 {'name': 'hierarchy.lvl6', 'type': 'string', 'facet': True, 'optional': True},
+                {'name': '.*_tag', 'type': 'string', 'facet': True, 'optional': True},
+                {'name': 'language', 'type': 'string', 'facet': True, 'optional': True},
+                {'name': 'tags', 'type': 'string[]', 'facet': True, 'optional': True},
                 {'name': 'item_priority', 'type': 'int64'},
             ],
             'default_sorting_field': 'item_priority'
