@@ -100,4 +100,8 @@ class TypesenseHelper:
                 continue
             transformed_record[f'hierarchy.lvl{x}'] = record['hierarchy'][f'lvl{x}']
 
+        # Convert version to array
+        if record['version'] and type(record['version']) == str:
+            transformed_record['version'] = record['version'].split(',')
+
         return transformed_record

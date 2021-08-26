@@ -2,10 +2,10 @@
   "index_name": "typesense_docs",
   "start_urls": [
     {
-      "url": "https://new-site.typesense.org/docs/(?P<version>.*?)/",
+      "url": "https://typesense.org/docs/(?P<version>.*?)/",
       "variables": {
         "version": [
-          "0.19.0"
+          "0.21.0"
         ]
       }
     }
@@ -17,10 +17,10 @@
       "lvl2": ".content__default h3",
       "lvl3": ".content__default h4",
       "lvl4": ".content__default h5",
-      "text": ".content__default p, .content__default li"
+      "text": ".content__default p, .content__default ul li, .content__default table tbody tr"
     }
   },
   "scrape_start_urls": false,
   "strip_chars": " .,;:#",
-  "nb_hits": 759
+  "nb_hits": 969
 }
