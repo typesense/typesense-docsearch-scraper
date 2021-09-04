@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 LABEL maintainer="contact@typesense.org"
 
 WORKDIR /root
@@ -14,14 +14,15 @@ RUN chgrp -R seleuser /home/seleuser
 
 RUN apt-get update -y && apt-get install -yq \
     software-properties-common\
-    python3.7
+    python3.8
+
 RUN add-apt-repository -y ppa:openjdk-r/ppa
 RUN apt-get update -y && apt-get install -yq \
     curl \
     wget \
     sudo \
     gnupg \
-    && curl -sL https://deb.nodesource.com/setup_8.x | sudo bash -
+    && curl -sL https://deb.nodesource.com/setup_14.x | sudo bash -
 RUN apt-get update -y && apt-get install -yq \
     nodejs -yq
 RUN apt-get update -y && apt-get install -yq \
@@ -35,10 +36,11 @@ RUN apt-get update -y && apt-get install -yq \
 RUN curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add
 RUN echo "deb [arch=amd64]  http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
 RUN apt-get update -y && apt-get install -yq \
-  google-chrome-stable=92.0.4515.159-1 \
+  google-chrome-stable=93.0.4577.63-1 \
   unzip
-RUN wget -q https://chromedriver.storage.googleapis.com/92.0.4515.107/chromedriver_linux64.zip
+RUN wget -q https://chromedriver.storage.googleapis.com/93.0.4577.15/chromedriver_linux64.zip
 RUN unzip chromedriver_linux64.zip
+RUN rm -f chromedriver_linux64.zip
 
 RUN mv chromedriver /usr/bin/chromedriver
 RUN chown root:root /usr/bin/chromedriver
@@ -47,6 +49,7 @@ RUN chmod +x /usr/bin/chromedriver
 RUN wget -q https://selenium-release.storage.googleapis.com/3.13/selenium-server-standalone-3.13.0.jar
 RUN wget -q http://www.java2s.com/Code/JarDownload/testng/testng-6.8.7.jar.zip
 RUN unzip testng-6.8.7.jar.zip
+RUN rm -f testng-6.8.7.jar.zip
 
 # Install DocSearch dependencies
 COPY Pipfile .
@@ -58,4 +61,4 @@ ENV PIPENV_HIDE_EMOJIS 1
 RUN apt-get update -y && apt-get install -yq \
     python3-pip
 RUN pip3 install pipenv
-RUN pipenv install --python 3.6
+RUN pipenv install --python 3.8
