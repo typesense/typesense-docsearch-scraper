@@ -17,6 +17,7 @@ class TypesenseHelper:
             'nodes': [{
                 'host': os.environ.get('TYPESENSE_HOST', None),
                 'port': os.environ.get('TYPESENSE_PORT', None),
+                'path': os.environ.get('TYPESENSE_PATH', None),
                 'protocol': os.environ.get('TYPESENSE_PROTOCOL', None)
             }]
         })
