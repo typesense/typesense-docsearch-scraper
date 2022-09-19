@@ -2,7 +2,7 @@ FROM typesense/docsearch-scraper-base
 LABEL maintainer="contact@typesense.org"
 
 WORKDIR /home/seleuser
-USER seleuser
+USER 1000
 
 # Copy DocSearch files
 COPY . .
