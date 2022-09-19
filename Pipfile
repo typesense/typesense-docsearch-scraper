@@ -4,21 +4,21 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-Scrapy = "==2.2.1"
-pyperclip = "==1.5.27"
-python-dotenv = "==0.7.1"
-ratelimit = "==1.4.1"
-selenium = "==3.141.0"
-slacker = "==0.9.60"
-tldextract = "==2.1.0"
-pytest = "==3.10.0"
-requests-iap = "==0.2.0"
-python-helpscout-v2 = "==1.0.1"
+Scrapy = ">=2.2.1"
+pyperclip = ">=1.5.27"
+python-dotenv = ">=0.7.1"
+ratelimit = ">=1.4.1"
+selenium = ">=4.4.3"
+slacker = ">=0.9.60"
+tldextract = ">=2.1.0"
+pytest = ">=3.10.0"
+requests-iap = ">=0.2.0"
+python-helpscout-v2 = ">=1.0.1"
 algoliasearch = ">=2.0,<3.0"
 typesense = "*"
 
 [dev-packages]
-pylint = "==2.3.1"
+pylint = ">=2.3.1"
 
 [requires]
-python_version = "3.6"
+python_version = "3.10"

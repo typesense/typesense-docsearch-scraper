@@ -99,7 +99,7 @@ class DocumentationSpider(CrawlSpider, SitemapSpider):
         ]
 
         # START _init_ part from SitemapSpider
-        # We son't want to check anything if we don't even have a sitemap URL
+        # We don't want to check anything if we don't even have a sitemap URL
         if config.sitemap_urls:
             # In case we don't have a special documentation regex,
             # we assume that start_urls are there to match a documentation part
