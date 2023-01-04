@@ -33,16 +33,11 @@ RUN apt-get update -y && apt-get install -yq \
 
 # https://www.ubuntuupdates.org/package/google_chrome/stable/main/base/google-chrome-stable for references around the latest versions
 RUN curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add
-RUN echo "deb [arch=amd64]  http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
 RUN apt-get update -y && apt-get install -yq \
-  google-chrome-stable=99.0.4844.51-1 \
+  chromium-browser=108.0.5359.71-0ubuntu0.18.04.5 \
+  chromium-chromedriver=108.0.5359.71-0ubuntu0.18.04.5 \
   unzip
-RUN wget -q https://chromedriver.storage.googleapis.com/99.0.4844.51/chromedriver_linux64.zip
-RUN unzip chromedriver_linux64.zip
 
-RUN mv chromedriver /usr/bin/chromedriver
-RUN chown root:root /usr/bin/chromedriver
-RUN chmod +x /usr/bin/chromedriver
 
 RUN wget -q https://selenium-release.storage.googleapis.com/3.13/selenium-server-standalone-3.13.0.jar
 RUN wget -q http://www.java2s.com/Code/JarDownload/testng/testng-6.8.7.jar.zip
@@ -57,5 +52,5 @@ ENV LANG C.UTF-8
 ENV PIPENV_HIDE_EMOJIS 1
 RUN apt-get update -y && apt-get install -yq \
     python3-pip
-RUN pip3 install pipenv
+RUN pip3 install pipenv==2022.4.8
 RUN pipenv install --python 3.6
