@@ -20,13 +20,83 @@ This section only applies if you're making changes to this scraper itself. If yo
 
 #### Releasing a new version
 
+Basic/abbreviated instructions:
+
 ```shellsession
 $ pipenv shell
 $ ./docsearch docker:build
 $ git tag -a 0.2.1 -m "0.2.1"
 $ ./docsearch deploy:scraper
 $ git push --follow-tags
+```
 
+Detailed instructions starting from a fresh Ubuntu Server 22.02:
+
+```bash
+# Install dependencies for pyenv:
+# https://github.com/pyenv/pyenv/wiki#suggested-build-environment
+sudo apt update && sudo apt install \
+  build-essential \
+  curl \
+  libbz2-dev \
+  libffi-dev \
+  liblzma-dev \
+  libncursesw5-dev \
+  libreadline-dev \
+  libsqlite3-dev \
+  libssl-dev \
+  libxml2-dev \
+  libxmlsec1-dev \
+  llvm \
+  make \
+  tk-dev \
+  wget \
+  xz-utils \
+  zlib1g-dev \
+  --yes
+
+# Install pyenv:
+# https://github.com/pyenv/pyenv#automatic-installer
+curl https://pyenv.run | bash
+
+# Add pyenv to path:
+echo >> ~/.bashrc
+echo '# Adding pyenv' >> ~/.bashrc
+echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
+echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
+echo 'eval "$(pyenv init -)"' >> ~/.bashrc
+
+# Reload the shell so that the pyenv is present.
+bash
+
+# Install Python 3.6 inside pyenv:
+pyenv install 3.6
+
+# Set Python 3.6 to be the active version:
+pyenv local 3.6
+
+# Upgrade pip:
+pip install --upgrade pip
+
+# Install pipenv:
+pip install --user pipenv
+
+# There will be a warning:
+# "The script virtualenv-clone is installed in '/home/[username]/.local.bin' which is not on PATH."
+# Fix the warning by adding it to the PATH:
+echo >> ~/.bashrc
+echo '# Fixing pipx warning' >> ~/.bashrc
+echo 'PATH=$PATH:~/.local/bin' >> ~/.bashrc
+
+# Reload the shell so that the variable is present.
+bash
+
+# Ensure that you are in the "typesense-docsearch-scraper" directory.
+# Then, install the Python dependencies:
+pipenv install
+
+# Then, open a shell with with the Python environment:
+pipenv shell
 ```
 
 ## Help
