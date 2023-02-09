@@ -97,6 +97,19 @@ pipenv install
 
 # Then, open a shell with with the Python environment:
 pipenv shell
+
+# Build a new version of the Docker container.
+./docsearch docker:build
+
+# Add a new Git tag.
+export TAG="0.2.1"
+git tag -a "$TAG" -m "$TAG"
+
+# Deploy the new version.
+./docsearch deploy:scraper
+
+# Sync with GitHub.
+git push --follow-tags
 ```
 
 ## Help
