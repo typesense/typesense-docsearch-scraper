@@ -88,7 +88,7 @@ echo >> ~/.bashrc
 echo '# Fixing pipx warning' >> ~/.bashrc
 echo 'PATH=$PATH:~/.local/bin' >> ~/.bashrc
 
-# Reload the shell so that the variable is present.
+# Reload the shell so that the new variable is present.
 bash
 
 # Ensure that you are in the "typesense-docsearch-scraper" directory.
