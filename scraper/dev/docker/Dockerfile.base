@@ -1,7 +1,5 @@
-FROM ubuntu:18.04
+FROM ubuntu:22.04
 LABEL maintainer="contact@typesense.org"
-
-WORKDIR /root
 
 # Install selenium
 ENV LC_ALL C
@@ -12,18 +10,20 @@ RUN useradd -d /home/seleuser -m seleuser
 RUN chown -R seleuser /home/seleuser
 RUN chgrp -R seleuser /home/seleuser
 
+WORKDIR /home/seleuser
+
 RUN apt-get update -y && apt-get install -yq \
     software-properties-common\
-    python3.7
+    python3.10 
 RUN add-apt-repository -y ppa:openjdk-r/ppa
 RUN apt-get update -y && apt-get install -yq \
     curl \
     wget \
     sudo \
     gnupg \
-    && curl -sL https://deb.nodesource.com/setup_8.x | sudo bash -
-RUN apt-get update -y && apt-get install -yq \
-    nodejs -yq
+    && curl -sL https://deb.nodesource.com/setup_18.x | sudo bash -
+RUN apt-get update -y && apt-get install -y \
+    nodejs
 RUN apt-get update -y && apt-get install -yq \
   unzip \
   xvfb \
@@ -35,18 +35,18 @@ RUN apt-get update -y && apt-get install -yq \
 RUN curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add
 RUN echo "deb [arch=amd64]  http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
 RUN apt-get update -y && apt-get install -yq \
-  google-chrome-stable=99.0.4844.51-1 \
+  google-chrome-stable=105.0.5195.125-1 \
   unzip
-RUN wget -q https://chromedriver.storage.googleapis.com/99.0.4844.51/chromedriver_linux64.zip
+RUN wget -q https://chromedriver.storage.googleapis.com/105.0.5195.52/chromedriver_linux64.zip
 RUN unzip chromedriver_linux64.zip
+RUN rm -f chromedriver_linux64.zip
 
 RUN mv chromedriver /usr/bin/chromedriver
 RUN chown root:root /usr/bin/chromedriver
 RUN chmod +x /usr/bin/chromedriver
 
-RUN wget -q https://selenium-release.storage.googleapis.com/3.13/selenium-server-standalone-3.13.0.jar
-RUN wget -q http://www.java2s.com/Code/JarDownload/testng/testng-6.8.7.jar.zip
-RUN unzip testng-6.8.7.jar.zip
+RUN wget -q https://github.com/SeleniumHQ/selenium/releases/download/selenium-4.4.0/selenium-server-4.4.0.jar
+RUN wget -q https://repo1.maven.org/maven2/org/testng/testng/7.6.1/testng-7.6.1.jar
 
 # Install DocSearch dependencies
 COPY Pipfile .
@@ -58,4 +58,6 @@ ENV PIPENV_HIDE_EMOJIS 1
 RUN apt-get update -y && apt-get install -yq \
     python3-pip
 RUN pip3 install pipenv
-RUN pipenv install --python 3.6
+
+USER 1000
+RUN pipenv sync --python 3.10

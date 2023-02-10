@@ -19,7 +19,7 @@ class RunTests(AbstractCommand):
             return False
         if isinstance(args[1], bool):
             return args[1]
-        if args[1] is "no_browser":
+        if args[1] == "no_browser":
             return "no_browser"
 
         return isinstance(args[1], str) and args[1].lower() == "true"
