@@ -83,7 +83,7 @@ pip install --user pipenv
 # "The script virtualenv-clone is installed in '/home/[username]/.local.bin' which is not on PATH."
 # Fix the warning by adding it to the PATH:
 echo >> ~/.bashrc
-echo '# Fixing pipx warning' >> ~/.bashrc
+echo '# Fixing pip warning' >> ~/.bashrc
 echo 'PATH=$PATH:~/.local/bin' >> ~/.bashrc
 source ~/.bashrc
 
