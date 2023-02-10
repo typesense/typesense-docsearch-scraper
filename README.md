@@ -121,7 +121,6 @@ echo 'PATH=$PATH:~/.local/bin' >> ~/.bashrc
 source ~/.bashrc
 
 # Ensure that pipenv is using the right environment:
-pipenv --rm
 pipenv --python 3.10
 pipenv lock --clear
 
