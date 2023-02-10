@@ -87,6 +87,11 @@ echo '# Fixing pip warning' >> ~/.bashrc
 echo 'PATH=$PATH:~/.local/bin' >> ~/.bashrc
 source ~/.bashrc
 
+# Make sure pipenv is using the right environment
+pipenv --rm
+pipenv --python 3.9
+pipenv lock --clear
+
 # Ensure that you are in the "typesense-docsearch-scraper" directory.
 # Then, install the Python dependencies:
 pipenv install
