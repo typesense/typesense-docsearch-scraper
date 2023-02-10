@@ -99,7 +99,7 @@ class DocumentationSpider(CrawlSpider, SitemapSpider):
         ]
 
         # START _init_ part from SitemapSpider
-        # We son't want to check anything if we don't even have a sitemap URL
+        # We don't want to check anything if we don't even have a sitemap URL
         if config.sitemap_urls:
             # In case we don't have a special documentation regex,
             # we assume that start_urls are there to match a documentation part
@@ -143,6 +143,9 @@ class DocumentationSpider(CrawlSpider, SitemapSpider):
                                   url)
                           },
                           errback=self.errback_alternative_link)
+
+    def parse(self, response, **kwargs):
+        return super()._parse(response, **kwargs)
 
     def add_records(self, response, from_sitemap):
         records = self.strategy.get_records_from_response(response)
