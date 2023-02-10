@@ -58,7 +58,6 @@ ENV PIPENV_HIDE_EMOJIS 1
 RUN apt-get update -y && apt-get install -yq \
     python3-pip
 RUN pip3 install pipenv
-RUN pipenv install --python 3.10
 
 USER 1000
 RUN pipenv sync --python 3.10
