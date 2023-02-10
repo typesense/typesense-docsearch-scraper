@@ -92,11 +92,11 @@ echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.
 echo 'eval "$(pyenv init -)"' >> ~/.bashrc
 source ~/.bashrc
 
-# Install Python 3.9 inside pyenv:
-pyenv install 3.9
+# Install Python 3.10 inside pyenv:
+pyenv install 3.10
 
-# Set Python 3.9 to be the active version:
-pyenv local 3.9
+# Set the active version of Python:
+pyenv local 3.10
 
 # Upgrade pip:
 pip install --upgrade pip
@@ -112,9 +112,9 @@ echo '# Fixing pip warning' >> ~/.bashrc
 echo 'PATH=$PATH:~/.local/bin' >> ~/.bashrc
 source ~/.bashrc
 
-# Make sure pipenv is using the right environment
+# Ensure that pipenv is using the right environment:
 pipenv --rm
-pipenv --python 3.9
+pipenv --python 3.10
 pipenv lock --clear
 
 # Ensure that you are in the "typesense-docsearch-scraper" directory.
