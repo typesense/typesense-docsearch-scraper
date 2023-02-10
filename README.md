@@ -65,15 +65,13 @@ echo '# Adding pyenv' >> ~/.bashrc
 echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
 echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
 echo 'eval "$(pyenv init -)"' >> ~/.bashrc
+source ~/.bashrc
 
-# Reload the shell so that the pyenv is present.
-bash
+# Install Python 3.9 inside pyenv:
+pyenv install 3.9
 
-# Install Python 3.6 inside pyenv:
-pyenv install 3.6
-
-# Set Python 3.6 to be the active version:
-pyenv local 3.6
+# Set Python 3.9 to be the active version:
+pyenv local 3.9
 
 # Upgrade pip:
 pip install --upgrade pip
@@ -87,9 +85,7 @@ pip install --user pipenv
 echo >> ~/.bashrc
 echo '# Fixing pipx warning' >> ~/.bashrc
 echo 'PATH=$PATH:~/.local/bin' >> ~/.bashrc
-
-# Reload the shell so that the new variable is present.
-bash
+source ~/.bashrc
 
 # Ensure that you are in the "typesense-docsearch-scraper" directory.
 # Then, install the Python dependencies:
