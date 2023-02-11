@@ -20,13 +20,127 @@ This section only applies if you're making changes to this scraper itself. If yo
 
 #### Releasing a new version
 
+Basic/abbreviated instructions:
+
 ```shellsession
 $ pipenv shell
 $ ./docsearch docker:build
 $ git tag -a 0.2.1 -m "0.2.1"
 $ ./docsearch deploy:scraper
 $ git push --follow-tags
+```
 
+Detailed instructions starting from a fresh Ubuntu Server 22.02:
+
+```bash
+# Install Docker:
+# https://docs.docker.com/engine/install/ubuntu/
+sudo apt update
+sudo apt remove docker docker-engine docker.io containerd runc --yes
+sudo apt install \
+    ca-certificates \
+    curl \
+    gnupg \
+    lsb-release \
+    --yes
+sudo mkdir -m 0755 -p /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt update
+sudo apt install \
+  docker-ce \
+  docker-ce-cli \
+  containerd.io \
+  docker-buildx-plugin \
+  docker-compose-plugin \
+  --yes
+sudo docker run hello-world
+
+# Run Docker as a non-root user:
+# https://www.digitalocean.com/community/questions/how-to-fix-docker-got-permission-denied-while-trying-to-connect-to-the-docker-daemon-socket
+sudo usermod -aG docker ${USER}
+exit
+# (Relogin.)
+docker run hello-world
+
+# Install dependencies for pyenv:
+# https://github.com/pyenv/pyenv/wiki#suggested-build-environment
+sudo apt update
+sudo apt install \
+  build-essential \
+  curl \
+  libbz2-dev \
+  libffi-dev \
+  liblzma-dev \
+  libncursesw5-dev \
+  libreadline-dev \
+  libsqlite3-dev \
+  libssl-dev \
+  libxml2-dev \
+  libxmlsec1-dev \
+  llvm \
+  make \
+  tk-dev \
+  wget \
+  xz-utils \
+  zlib1g-dev \
+  --yes
+
+# Install pyenv:
+# https://github.com/pyenv/pyenv#automatic-installer
+curl https://pyenv.run | bash
+
+# Add pyenv to path:
+echo >> ~/.bashrc
+echo '# Adding pyenv' >> ~/.bashrc
+echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
+echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
+echo 'eval "$(pyenv init -)"' >> ~/.bashrc
+source ~/.bashrc
+
+# Install Python 3.10 inside pyenv:
+pyenv install 3.10
+
+# Set the active version of Python:
+pyenv local 3.10
+
+# Upgrade pip:
+pip install --upgrade pip
+
+# Install pipenv:
+pip install --user pipenv
+
+# There will be a warning:
+# "The script virtualenv-clone is installed in '/home/[username]/.local.bin' which is not on PATH."
+# Fix the warning by adding it to the PATH:
+echo >> ~/.bashrc
+echo '# Fixing pip warning' >> ~/.bashrc
+echo 'PATH=$PATH:~/.local/bin' >> ~/.bashrc
+source ~/.bashrc
+
+# Ensure that you are in the "typesense-docsearch-scraper" directory.
+# Then, install the Python dependencies for this project:
+pipenv --python 3.10
+pipenv lock --clear
+pipenv install
+
+# Then, open a shell with with the Python environment:
+pipenv shell
+
+# Build a new version of the Docker container.
+./docsearch docker:build
+
+# Add a new Git tag.
+export TAG="0.2.1"
+git tag -a "$TAG" -m "$TAG"
+
+# Deploy the new version.
+./docsearch deploy:scraper
+
+# Sync with GitHub.
+git push --follow-tags
 ```
 
 ## Help
