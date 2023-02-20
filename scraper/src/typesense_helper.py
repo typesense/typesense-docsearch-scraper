@@ -23,6 +23,7 @@ class TypesenseHelper:
         })
         self.alias_name = alias_name
         self.collection_name_tmp = collection_name_tmp
+        self.colliection_locale = os.environ.get('TYPESENSE_COLLECTION_LOCALE', 'en')
 
     def create_tmp_collection(self):
         """Create a temporary index to add records to"""
@@ -35,19 +36,19 @@ class TypesenseHelper:
             'name': self.collection_name_tmp,
             'fields': [
                 {'name': 'anchor', 'type': 'string', 'optional': True},
-                {'name': 'content', 'type': 'string', 'optional': True},
+                {'name': 'content', 'type': 'string', 'locale': self.colliection_locale, 'optional': True},
                 {'name': 'url', 'type': 'string', 'facet': True},
                 {'name': 'version', 'type': 'string[]', 'facet': True, 'optional': True},
-                {'name': 'hierarchy.lvl0', 'type': 'string', 'facet': True, 'optional': True},
-                {'name': 'hierarchy.lvl1', 'type': 'string', 'facet': True, 'optional': True},
-                {'name': 'hierarchy.lvl2', 'type': 'string', 'facet': True, 'optional': True},
-                {'name': 'hierarchy.lvl3', 'type': 'string', 'facet': True, 'optional': True},
-                {'name': 'hierarchy.lvl4', 'type': 'string', 'facet': True, 'optional': True},
-                {'name': 'hierarchy.lvl5', 'type': 'string', 'facet': True, 'optional': True},
-                {'name': 'hierarchy.lvl6', 'type': 'string', 'facet': True, 'optional': True},
-                {'name': '.*_tag', 'type': 'string', 'facet': True, 'optional': True},
+                {'name': 'hierarchy.lvl0', 'type': 'string', 'facet': True, 'locale': self.colliection_locale, 'optional': True},
+                {'name': 'hierarchy.lvl1', 'type': 'string', 'facet': True, 'locale': self.colliection_locale, 'optional': True},
+                {'name': 'hierarchy.lvl2', 'type': 'string', 'facet': True, 'locale': self.colliection_locale, 'optional': True},
+                {'name': 'hierarchy.lvl3', 'type': 'string', 'facet': True, 'locale': self.colliection_locale, 'optional': True},
+                {'name': 'hierarchy.lvl4', 'type': 'string', 'facet': True, 'locale': self.colliection_locale, 'optional': True},
+                {'name': 'hierarchy.lvl5', 'type': 'string', 'facet': True, 'locale': self.colliection_locale, 'optional': True},
+                {'name': 'hierarchy.lvl6', 'type': 'string', 'facet': True, 'locale': self.colliection_locale, 'optional': True},
+                {'name': '.*_tag', 'type': 'string', 'facet': True, 'locale': self.colliection_locale, 'optional': True},
                 {'name': 'language', 'type': 'string', 'facet': True, 'optional': True},
-                {'name': 'tags', 'type': 'string[]', 'facet': True, 'optional': True},
+                {'name': 'tags', 'type': 'string[]', 'facet': True, 'locale': self.colliection_locale, 'optional': True},
                 {'name': 'item_priority', 'type': 'int64'},
             ],
             'default_sorting_field': 'item_priority'
