@@ -46,6 +46,7 @@ class TypesenseHelper:
                 {'name': 'hierarchy.lvl4', 'type': 'string', 'facet': True, 'locale': self.collection_locale, 'optional': True},
                 {'name': 'hierarchy.lvl5', 'type': 'string', 'facet': True, 'locale': self.collection_locale, 'optional': True},
                 {'name': 'hierarchy.lvl6', 'type': 'string', 'facet': True, 'locale': self.collection_locale, 'optional': True},
+                {'name': 'type', 'type': 'string', 'facet': True, 'locale': self.collection_locale, 'optional': True},
                 {'name': '.*_tag', 'type': 'string', 'facet': True, 'locale': self.collection_locale, 'optional': True},
                 {'name': 'language', 'type': 'string', 'facet': True, 'optional': True},
                 {'name': 'tags', 'type': 'string[]', 'facet': True, 'locale': self.collection_locale, 'optional': True},
