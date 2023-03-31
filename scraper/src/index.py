@@ -38,7 +38,8 @@ def run_config(config):
 
     typesense_helper = TypesenseHelper(
         config.index_name,
-        config.index_name_tmp
+        config.index_name_tmp,
+        config.custom_settings
     )
     typesense_helper.create_tmp_collection()
 

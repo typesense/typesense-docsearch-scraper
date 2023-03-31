@@ -11,7 +11,7 @@ import os
 class TypesenseHelper:
     """TypesenseHelper"""
 
-    def __init__(self, alias_name, collection_name_tmp):
+    def __init__(self, alias_name, collection_name_tmp, custom_settings):
         self.typesense_client = typesense.Client({
             'api_key': os.environ.get('TYPESENSE_API_KEY', None),
             'nodes': [{
@@ -24,6 +24,7 @@ class TypesenseHelper:
         self.alias_name = alias_name
         self.collection_name_tmp = collection_name_tmp
         self.collection_locale = os.environ.get('TYPESENSE_COLLECTION_LOCALE', 'en')
+        self.custom_settings = custom_settings
 
     def create_tmp_collection(self):
         """Create a temporary index to add records to"""
@@ -32,7 +33,7 @@ class TypesenseHelper:
         except exceptions.ObjectNotFound:
             pass
 
-        self.typesense_client.collections.create({
+        schema = {
             'name': self.collection_name_tmp,
             'fields': [
                 {'name': 'anchor', 'type': 'string', 'optional': True},
@@ -52,8 +53,20 @@ class TypesenseHelper:
                 {'name': 'tags', 'type': 'string[]', 'facet': True, 'locale': self.collection_locale, 'optional': True},
                 {'name': 'item_priority', 'type': 'int64'},
             ],
-            'default_sorting_field': 'item_priority'
-        })
+            'default_sorting_field': 'item_priority',
+            'token_separators': ['_', '-']
+        }
+
+        if self.custom_settings is not None:
+            token_separators = self.custom_settings.get('token_separators', None)
+            if token_separators is not None:
+                schema['token_separators'] = token_separators
+
+            symbols_to_index = self.custom_settings.get('symbols_to_index', None)
+            if symbols_to_index is not None:
+                schema['symbols_to_index'] = symbols_to_index
+
+        self.typesense_client.collections.create(schema)
 
     def add_records(self, records, url, from_sitemap):
         """Add new records to the temporary index"""

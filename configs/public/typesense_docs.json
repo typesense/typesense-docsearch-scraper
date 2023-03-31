@@ -22,5 +22,9 @@
   },
   "scrape_start_urls": false,
   "strip_chars": " .,;:#",
-  "nb_hits": 969
+  "nb_hits": 505,
+  "custom_settings": {
+    "token_separators": ["_"],
+    "symbols_to_index": ["*"]
+  }
 }
