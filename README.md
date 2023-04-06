@@ -14,6 +14,13 @@ Think of it as an open source alternative to Algolia and an easier-to-use, batte
 
 Read detailed step-by-step instructions on how to configure and setup the scraper on Typesense's dedicated documentation site: https://typesense.org/docs/latest/guide/docsearch.html
 
+## Compatibility
+
+| typesense-docsearch-scraper | typesense-server |
+| --- | --- |
+| 0.5.0 | >= 0.22.1 |
+| 0.4.x and below | >= 0.21.0  |
+
 ## Development Workflow
 
 This section only applies if you're making changes to this scraper itself. If you only need to run the scraper, see Usage instructions above.
