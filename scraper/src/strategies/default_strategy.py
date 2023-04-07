@@ -83,6 +83,7 @@ class DefaultStrategy(AbstractStrategy):
 
         records = []
 
+        len_nodes = len(nodes)
         for position, node in enumerate(nodes):
             current_level = self._get_level_of_node(node, nodes_per_level,
                                                     levels)
@@ -146,7 +147,8 @@ class DefaultStrategy(AbstractStrategy):
                     'page_rank': UrlsParser.get_page_rank(current_page_url,
                                                           self.config.start_urls),
                     'level': self.get_level_weight(current_level),
-                    'position': position
+                    'position': position,
+                    'position_descending': len_nodes - position
                 },
                 'url': current_page_url,
                 'url_without_variables': current_page_url

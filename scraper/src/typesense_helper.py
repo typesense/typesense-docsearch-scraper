@@ -109,7 +109,7 @@ class TypesenseHelper:
         transformed_record = {k: v for k, v in record.items() if v is not None}
         transformed_record['item_priority'] = transformed_record['weight']['page_rank'] * 1000000000 + \
                                               transformed_record['weight']['level'] * 1000 + \
-                                              transformed_record['weight']['position']
+                                              transformed_record['weight']['position_descending']
 
         # Flatten nested hierarchy field
         for x in range(0, 7):
