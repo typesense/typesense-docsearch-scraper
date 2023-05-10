@@ -16,6 +16,7 @@ requests-iap = ">=0.2.0"
 python-helpscout-v2 = ">=1.0.1"
 algoliasearch = ">=2.0,<3.0"
 typesense = "==0.10.0"
+python-keycloak-client = "==0.2.3"
 
 [dev-packages]
 pylint = ">=2.3.1"
