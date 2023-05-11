@@ -64,7 +64,7 @@ def run_config(config):
         )
 
     # Google Identity-Aware Proxy (IAP)
-    elif os.getenv("IAP_AUTH_CLIENT_ID") and 
+    elif (os.getenv("IAP_AUTH_CLIENT_ID") and 
         os.getenv("IAP_AUTH_SERVICE_ACCOUNT_JSON")):
         iap_token = IAPAuth(
             client_id=os.getenv("IAP_AUTH_CLIENT_ID"),
