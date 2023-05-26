@@ -1,5 +1,5 @@
 {
-  "index_name": "typesense_docs",
+  "index_name": "typesense_docs-test",
   "start_urls": [
     {
       "url": "https://typesense.org/docs/(?P<version>.*?)/",

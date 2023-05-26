@@ -1,4 +1,5 @@
-FROM typesense/docsearch-scraper-base
+ARG SCRAPER_VERSION
+FROM typesense/docsearch-scraper-base:$SCRAPER_VERSION
 LABEL maintainer="contact@typesense.org"
 
 WORKDIR /home/seleuser

@@ -137,14 +137,21 @@ pipenv install
 pipenv shell
 
 # Build a new version of the Docker container.
-export TAG="0.4.1"
-docker buildx build -f ./scraper/dev/docker/Dockerfile -t typesense/docsearch-scraper:${TAG} .
-docker push typesense/docsearch-scraper:${TAG}
-docker tag typesense/docsearch-scraper:${TAG} typesense/docsearch-scraper:latest
+export SCRAPER_VERSION="0.4.1"
+docker buildx build -f ./scraper/dev/docker/Dockerfile.base -t typesense/docsearch-scraper-base:${SCRAPER_VERSION} .
+docker buildx build -f ./scraper/dev/docker/Dockerfile --build-arg SCRAPER_VERSION=${SCRAPER_VERSION}  -t typesense/docsearch-scraper:${SCRAPER_VERSION} .
+
+docker push typesense/docsearch-scraper-base:${SCRAPER_VERSION}
+docker push typesense/docsearch-scraper:${SCRAPER_VERSION}
+
+docker tag typesense/docsearch-scraper-base:${SCRAPER_VERSION} typesense/docsearch-scraper-base:latest
+docker tag typesense/docsearch-scraper:${SCRAPER_VERSION} typesense/docsearch-scraper:latest
+
+docker push typesense/docsearch-scraper-base:latest
 docker push typesense/docsearch-scraper:latest
 
 # Add a new Git tag.
-git tag -a "$TAG" -m "$TAG"
+git tag -a "${SCRAPER_VERSION}" -m "${SCRAPER_VERSION}"
 
 # Sync with GitHub.
 git push --follow-tags
