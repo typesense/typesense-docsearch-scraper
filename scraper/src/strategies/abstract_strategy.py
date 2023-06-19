@@ -95,7 +95,7 @@ class AbstractStrategy:
 
     @staticmethod
     def escape(text):
-        text = html.escape(text)
+        text = html.escape(text, quote=False)
 
         for tag in AbstractStrategy.keep_tags:
             opening_tag = "<" + tag + ">"
