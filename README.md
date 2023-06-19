@@ -136,18 +136,19 @@ pipenv install
 # Then, open a shell with with the Python environment:
 pipenv shell
 
-# Build a new version of the Docker container.
-export SCRAPER_VERSION="0.4.1"
-docker buildx build -f ./scraper/dev/docker/Dockerfile.base -t typesense/docsearch-scraper-base:${SCRAPER_VERSION} .
-docker buildx build -f ./scraper/dev/docker/Dockerfile --build-arg SCRAPER_VERSION=${SCRAPER_VERSION}  -t typesense/docsearch-scraper:${SCRAPER_VERSION} .
-
-docker push typesense/docsearch-scraper-base:${SCRAPER_VERSION}
-docker push typesense/docsearch-scraper:${SCRAPER_VERSION}
-
-docker tag typesense/docsearch-scraper-base:${SCRAPER_VERSION} typesense/docsearch-scraper-base:latest
-docker tag typesense/docsearch-scraper:${SCRAPER_VERSION} typesense/docsearch-scraper:latest
-
+# Build a new version of the base Docker container - ONLY NEEDED WHEN WE CHANGE DEPENDENCIES
+export SCRAPER_BASE_VERSION="0.7.0" # Only need to change this when we update dependencies
+docker buildx build -f ./scraper/dev/docker/Dockerfile.base -t typesense/docsearch-scraper-base:${SCRAPER_BASE_VERSION} .
+docker push typesense/docsearch-scraper-base:${SCRAPER_BASE_VERSION}
+docker tag typesense/docsearch-scraper-base:${SCRAPER_BASE_VERSION} typesense/docsearch-scraper-base:latest
 docker push typesense/docsearch-scraper-base:latest
+
+# Build a new version of the scraper Docker container
+export SCRAPER_VERSION="0.8.0"
+export SCRAPER_BASE_VERSION="latest"
+docker buildx build -f ./scraper/dev/docker/Dockerfile --build-arg SCRAPER_BASE_VERSION=${SCRAPER_BASE_VERSION} -t typesense/docsearch-scraper:${SCRAPER_VERSION} .
+docker push typesense/docsearch-scraper:${SCRAPER_VERSION}
+docker tag typesense/docsearch-scraper:${SCRAPER_VERSION} typesense/docsearch-scraper:latest
 docker push typesense/docsearch-scraper:latest
 
 # Add a new Git tag.
@@ -155,6 +156,8 @@ git tag -a "${SCRAPER_VERSION}" -m "${SCRAPER_VERSION}"
 
 # Sync with GitHub.
 git push --follow-tags
+
+
 ```
 
 ## Help
