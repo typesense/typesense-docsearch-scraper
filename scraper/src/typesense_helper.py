@@ -67,6 +67,10 @@ class TypesenseHelper:
             if symbols_to_index is not None:
                 schema['symbols_to_index'] = symbols_to_index
 
+            field_definitions = self.custom_settings.get('field_definitions', None)
+            if field_definitions is not None:
+                schema['fields'] = field_definitions
+
         self.typesense_client.collections.create(schema)
 
     def add_records(self, records, url, from_sitemap):
