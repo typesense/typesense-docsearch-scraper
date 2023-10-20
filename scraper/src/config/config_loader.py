@@ -48,7 +48,7 @@ class ConfigLoader:
     strip_chars = u".,;:§¶"
     update_nb_hits = None
     use_anchors = False
-    user_agent = 'Algolia DocSearch Crawler'
+    user_agent = 'Typesense DocSearch Scraper (Bot; https://typesense.org/docs/guide/docsearch.html)'
     only_content_level = False
     query_rules = []
 
