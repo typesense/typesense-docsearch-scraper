@@ -14,6 +14,16 @@ Think of it as an open source alternative to Algolia and an easier-to-use, batte
 
 Read detailed step-by-step instructions on how to configure and setup the scraper on Typesense's dedicated documentation site: https://typesense.org/docs/latest/guide/docsearch.html
 
+## Changelog
+
+We use git tags to identify every release. 
+
+So to view the changelog for a release, you can compare tags using a GitHub link like this:
+
+[https://github.com/typesense/typesense-docsearch-scraper/compare/0.8.0...0.9.0](https://github.com/typesense/typesense-docsearch-scraper/compare/0.8.0...0.9.0).
+
+Remember to change the version numbers in the URL as needed. 
+
 ## Compatibility
 
 | typesense-docsearch-scraper | typesense-server |
