@@ -19,7 +19,8 @@ class TypesenseHelper:
                 'port': os.environ.get('TYPESENSE_PORT', None),
                 'path': os.environ.get('TYPESENSE_PATH', ''),
                 'protocol': os.environ.get('TYPESENSE_PROTOCOL', None)
-            }]
+            }],
+            'connection_timeout_seconds': 30 * 60
         })
         self.alias_name = alias_name
         self.collection_name_tmp = collection_name_tmp
