@@ -154,7 +154,7 @@ docker tag typesense/docsearch-scraper-base:${SCRAPER_BASE_VERSION} typesense/do
 docker push typesense/docsearch-scraper-base:latest
 
 # Build a new version of the scraper Docker container
-export SCRAPER_VERSION="0.9.0"
+export SCRAPER_VERSION="0.9.1"
 export SCRAPER_BASE_VERSION="latest"
 docker buildx build -f ./scraper/dev/docker/Dockerfile --build-arg SCRAPER_BASE_VERSION=${SCRAPER_BASE_VERSION} -t typesense/docsearch-scraper:${SCRAPER_VERSION} .
 docker push typesense/docsearch-scraper:${SCRAPER_VERSION}
