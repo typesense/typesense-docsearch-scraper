@@ -39,20 +39,14 @@ class TestOpenSeleniumBrowser:
         c = config({
             "start_urls": [
                 {
-                    "url": "https://symfony.com/doc/(?P<version>.*?)/(?P<type_of_content>.*?)/",
+                    "url": "https://example.com/(?P<var1>.*?)/(?P<var2>.*?)/",
                     "variables": {
-                        "version": {
-                            "url": "https://symfony.com/doc/current/book/controller.html",
-                            "js": """\
-var versions = $('.doc-switcher .versions li').map(function (i, elt) {\
-  return $(elt).find('a').html().split('/')[0].replace(/ |\\n/g,'');\
-}).toArray();\
-versions.push('current');\
-return JSON.stringify(versions);"""
+                        "var1": {
+                            "url": "https://example.com",
+                            "js": "return JSON.stringify(\
+                document.getElementsByTagName('h1')[0].textContent.split(' '))"
                         },
-                        "type_of_content": ["book", "bundles", "reference",
-                                            "components", "cookbook",
-                                            "best_practices"]
+                        "var2": ["one", "two", "three"]
                     }
                 }
             ]
