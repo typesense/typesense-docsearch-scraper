@@ -12,31 +12,29 @@ RUN chgrp -R seleuser /home/seleuser
 
 WORKDIR /home/seleuser
 
-RUN apt-get update -y && apt-get install -yq \
-    software-properties-common\
-    python3.10 
-RUN add-apt-repository -y ppa:openjdk-r/ppa
-RUN apt-get update -y && apt-get install -yq \
-    curl \
-    wget \
-    sudo \
-    gnupg \
-    && curl -sL https://deb.nodesource.com/setup_18.x | sudo bash -
-RUN apt-get update -y && apt-get install -y \
-    nodejs
-RUN apt-get update -y && apt-get install -yq \
-  unzip \
-  xvfb \
-  libxi6 \
-  libgconf-2-4 \
-  default-jdk
+RUN apt-get update -y && \
+    apt-get install -yq --no-install-recommends \
+      gnupg \
+      software-properties-common \
+      python3.10 \
+      python3-pip && \
+    add-apt-repository -y ppa:openjdk-r/ppa && \
+    apt-get install -yq --no-install-recommends \
+      curl \
+      wget \
+      xvfb \
+      libxi6 \
+      libgconf-2-4 \
+      default-jdk && \
+    rm -rf /var/lib/apt/lists/*
 
 # https://www.ubuntuupdates.org/package/google_chrome/stable/main/base/google-chrome-stable for references around the latest versions
 RUN curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add
 RUN echo "deb [arch=amd64]  https://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
 RUN apt-get update -y && apt-get install -yq \
-  google-chrome-stable=113.0.5672.126-1 \
-  unzip
+  google-chrome-stable=121.0.6167.85-1 \
+  unzip && \
+  rm -rf /var/lib/apt/lists/*
 RUN wget -q https://chromedriver.storage.googleapis.com/113.0.5672.63/chromedriver_linux64.zip
 RUN unzip chromedriver_linux64.zip
 RUN rm -f chromedriver_linux64.zip
@@ -55,8 +53,6 @@ COPY Pipfile.lock .
 ENV LC_ALL C.UTF-8
 ENV LANG C.UTF-8
 ENV PIPENV_HIDE_EMOJIS 1
-RUN apt-get update -y && apt-get install -yq \
-    python3-pip
 RUN pip3 install pipenv
 
 USER 1000
