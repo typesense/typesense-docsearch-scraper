@@ -23,19 +23,19 @@ class BuildDockerScraper(AbstractBuildDocker):
         test = self.get_option("test", args)
 
         if test:
-            return self.build_docker_file("scraper/dev/docker/Dockerfile.test",
+            return self.build_docker_target("test",
                                           "typesense/docsearch-scraper-test",
-                                          local_tag=local_tag)
+                                            local_tag=local_tag)
 
-        code = self.build_docker_file("scraper/dev/docker/Dockerfile.base",
+        code = self.build_docker_target("base",
                                       "typesense/docsearch-scraper-base",
-                                      local_tag=local_tag)
+                                        local_tag=local_tag)
 
         if code != 0:
             return code
-        code = self.build_docker_file("scraper/dev/docker/Dockerfile.dev",
-                                      local_tag=local_tag)
+        code = self.build_docker_target("dev",
+                                        local_tag=local_tag)
         if code != 0:
             return code
-        return self.build_docker_file("scraper/dev/docker/Dockerfile",
+        return self.build_docker_target("release",
                                       "typesense/docsearch-scraper", local_tag=local_tag)

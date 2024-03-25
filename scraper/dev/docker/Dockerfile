@@ -1,5 +1,72 @@
-ARG SCRAPER_BASE_VERSION
-FROM typesense/docsearch-scraper-base:$SCRAPER_BASE_VERSION
+# syntax=docker/dockerfile:1.4
+FROM debian:12-slim as base
+LABEL maintainer="contact@typesense.org"
+
+# Install selenium
+ENV LC_ALL C
+ENV DEBIAN_FRONTEND noninteractive
+ENV DEBCONF_NONINTERACTIVE_SEEN true
+
+RUN useradd -d /home/seleuser -m seleuser
+RUN chown -R seleuser /home/seleuser
+RUN chgrp -R seleuser /home/seleuser
+
+WORKDIR /home/seleuser
+
+RUN apt-get update -y && apt-get install -yq \
+    software-properties-common\
+    python3
+
+RUN apt-get update -y && apt-get install -yq \
+    curl \
+    wget \
+    sudo \
+    gnupg \
+    && curl -sL https://deb.nodesource.com/setup_18.x | sudo bash -
+RUN apt-get update -y && apt-get install -y \
+    nodejs
+RUN apt-get update -y && apt-get install -yq \
+  unzip \
+  xvfb \
+  libxi6 \
+  libgconf-2-4 \
+  default-jdk
+
+RUN apt-get update -y && apt-get install -yq \
+  chromium-driver
+
+RUN wget -q https://github.com/SeleniumHQ/selenium/releases/download/selenium-4.4.0/selenium-server-4.4.0.jar
+RUN wget -q https://repo1.maven.org/maven2/org/testng/testng/7.6.1/testng-7.6.1.jar
+
+# Install DocSearch dependencies
+COPY Pipfile .
+COPY Pipfile.lock .
+
+ENV LC_ALL C.UTF-8
+ENV LANG C.UTF-8
+ENV PIPENV_HIDE_EMOJIS 1
+RUN apt-get update -y && apt-get install -yq \
+    python3-pip
+RUN pip3 install pipenv --break-system-packages
+
+USER 1000
+RUN pipenv sync --python 3.11
+
+FROM base AS dev
+LABEL maintainer="contact@typesense.org"
+
+FROM base as test
+LABEL maintainer="contact@typesense.org"
+
+WORKDIR /home/seleuser
+USER 1000
+
+# Copy DocSearch files
+COPY . .
+RUN touch .env
+ENTRYPOINT ["pipenv", "run", "./docsearch", "test", "no_browser"]
+
+FROM base as release
 LABEL maintainer="contact@typesense.org"
 
 WORKDIR /home/seleuser

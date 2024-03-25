@@ -3,16 +3,20 @@ from .abstract_command import AbstractCommand
 
 class AbstractBuildDocker(AbstractCommand):
     @staticmethod
-    def build_docker_file(file, image="typesense/docsearch-scraper-dev",
-                          local_tag=False):
+    def build_docker_target(file, image="typesense/docsearch-scraper-dev",
+                            local_tag=False):
         tags = [image]
 
         if local_tag:
             tag = AbstractBuildDocker.get_local_tag().decode()
             tags.append(image + ":" + tag)
 
-        cmd = ["docker", "build"] + [param for tag in tags for param in
-                                     ['-t', tag]] + ["-f", file, "."]
+        cmd = ["docker", "buildx", "build"] + [param for tag in tags for param in
+                                     ['-t', tag]] + ["-f", "scraper/dev/docker/Dockerfile", "--target", file, "."]
+        if local_tag:
+            cmd += ["--platform", "linux/amd64,linux/arm64", "--push"]
+        else:
+            cmd += ["--load"]
         return AbstractCommand.exec_shell_command(cmd)
 
     def get_options(self):
