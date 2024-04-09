@@ -1,0 +1,22 @@
+name: Lint and test
+
+on: [pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - run: touch .env
+      - name: Install dependencies
+        run: |
+          pip install pipenv
+          pipenv install --dev
+      - name: Run linter
+        run: pipenv run pylint scraper cli deployer
+      - name: Run tests
+        run: pipenv run ./docsearch test no_browser
