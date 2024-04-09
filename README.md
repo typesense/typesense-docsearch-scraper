@@ -12,7 +12,7 @@ Think of it as an open source alternative to Algolia and an easier-to-use, batte
 
 ## Usage
 
-Read detailed step-by-step instructions on how to configure and setup the scraper on Typesense's dedicated documentation site: https://typesense.org/docs/latest/guide/docsearch.html
+Read detailed step-by-step instructions on how to configure and setup the scraper on Typesense's dedicated documentation site: https://typesense.org/docs/guide/docsearch.html
 
 ## Changelog
 
