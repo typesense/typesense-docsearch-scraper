@@ -32,8 +32,8 @@ class RunConfigDocker(AbstractCommand):
         self.check_not_docsearch_app_id("run a config manually")
 
         if os.path.isfile(args[0]):
-            f = open(args[0], "r")
-            config = f.read()
+            with open(args[0], "r") as f:
+                config = f.read()
         else:
             raise ValueError(
                 "Config option: {} is not a path to a file".format(args[0]))
