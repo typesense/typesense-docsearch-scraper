@@ -186,12 +186,7 @@ class TypesenseHelper:
 
     def commit_tmp_collection(self):
         """Update alias to point to new collection"""
-        old_collection_name = None
-
-        try:
-            old_collection_name = self.typesense_client.aliases[self.alias_name].retrieve()['collection_name']
-        except exceptions.ObjectNotFound:
-            pass
+        old_collection_name = self._get_old_collection_name()
 
         self.typesense_client.aliases.upsert(
             self.alias_name, {'collection_name': self.collection_name_tmp}
@@ -220,3 +215,12 @@ class TypesenseHelper:
             transformed_record['version'] = record['version'].split(',')
 
         return transformed_record
+
+    def _get_old_collection_name(self):
+        """Get the old collection name from the alias"""
+        try:
+            return self.typesense_client.aliases[self.alias_name].retrieve()[
+                'collection_name'
+            ]
+        except exceptions.ObjectNotFound:
+            return None
