@@ -193,6 +193,8 @@ class TypesenseHelper:
         )
 
         if old_collection_name:
+            self._transfer_synonyms(old_collection_name)
+            self._transfer_overrides(old_collection_name)
             self.typesense_client.collections[old_collection_name].delete()
 
     @staticmethod
@@ -224,3 +226,29 @@ class TypesenseHelper:
             ]
         except exceptions.ObjectNotFound:
             return None
+
+    def _transfer_synonyms(self, old_collection_name):
+        """Transfer synonyms from old collection to new collection"""
+        synonyms = (
+            self.typesense_client.collections[old_collection_name]
+            .synonyms.retrieve()
+            .get('synonyms', [])
+        )
+        for synonym in synonyms:
+            synonym_keys = {key: synonym[key] for key in synonym if key != 'id'}
+            self.typesense_client.collections[self.collection_name_tmp].synonyms.upsert(
+                synonym['id'], synonym_keys
+            )
+
+    def _transfer_overrides(self, old_collection_name):
+        """Transfer overrides from old collection to new collection"""
+        overrides = (
+            self.typesense_client.collections[old_collection_name]
+            .overrides.retrieve()
+            .get('overrides', [])
+        )
+        for override in overrides:
+            override_keys = {key: override[key] for key in override if key != 'id'}
+            self.typesense_client.collections[
+                self.collection_name_tmp
+            ].overrides.upsert(override['id'], override_keys)
