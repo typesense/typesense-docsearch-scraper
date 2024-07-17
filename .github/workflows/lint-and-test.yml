@@ -1,16 +1,38 @@
 name: Lint and test
 
-on: [pull_request]
+on: [pull_request, push]
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        typesense-version: ["0.25.2", "26.0"]
+        typesense-port: ["8108:8108"]
+
+    services:
+      typesense:
+        image: typesense/typesense:${{ matrix.typesense-version }}
+
     steps:
       - uses: actions/checkout@v4
+      - name: Start Typesense
+        run: |
+          docker run -d \
+          -p ${{ matrix.typesense-port }} \
+          --name typesense \
+          -v /tmp/typesense-data:/data \
+          typesense/typesense:${{ matrix.typesense-version}} \
+          --api-key=xyz \
+          --data-dir /data \
+          --enable-cors
+      - name: Curl Typesense
+        run: sleep 1 && curl http://localhost:8108/health 
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.x'
+          python-version: "3.x"
       - run: touch .env
       - name: Install dependencies
         run: |
