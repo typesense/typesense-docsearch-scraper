@@ -22,13 +22,13 @@ jobs:
           docker run -d \
           -p ${{ matrix.typesense-port }} \
           --name typesense \
-          -v /tmp/typesense-data:/data \
+          -v /tmp/typesense:/data \
           typesense/typesense:${{ matrix.typesense-version}} \
           --api-key=xyz \
           --data-dir /data \
           --enable-cors
       - name: Curl Typesense
-        run: sleep 1 && curl http://localhost:8108/health 
+        run: sleep 10 && curl http://localhost:8108/health 
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
