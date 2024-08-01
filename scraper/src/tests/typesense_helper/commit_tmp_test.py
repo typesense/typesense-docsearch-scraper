@@ -209,13 +209,13 @@ expected_schema = {
 def typesense_client():
     client = Client(
         {
-            'api_key': os.environ.get('TYPESENSE_API_KEY', None),
+            'api_key': os.environ.get('TYPESENSE_API_KEY', 'xyz'),
             'nodes': [
                 {
-                    'host': os.environ.get('TYPESENSE_HOST', None),
-                    'port': os.environ.get('TYPESENSE_PORT', None),
+                    'host': os.environ.get('TYPESENSE_HOST', 'localhost'),
+                    'port': os.environ.get('TYPESENSE_PORT', '8108'),
                     'path': os.environ.get('TYPESENSE_PATH', ''),
-                    'protocol': os.environ.get('TYPESENSE_PROTOCOL', None),
+                    'protocol': os.environ.get('TYPESENSE_PROTOCOL', 'http'),
                 }
             ],
             'connection_timeout_seconds': 30 * 60,
