@@ -16,13 +16,13 @@ class TypesenseHelper:
     def __init__(self, alias_name, collection_name_tmp, custom_settings):
         self.typesense_client = typesense.Client(
             {
-                'api_key': os.environ.get('TYPESENSE_API_KEY', 'xyz'),
+                'api_key': os.environ.get('TYPESENSE_API_KEY', None),
                 'nodes': [
                     {
-                        'host': os.environ.get('TYPESENSE_HOST', 'localhost'),
-                        'port': os.environ.get('TYPESENSE_PORT', '8108'),
+                        'host': os.environ.get('TYPESENSE_HOST', None),
+                        'port': os.environ.get('TYPESENSE_PORT', None),
                         'path': os.environ.get('TYPESENSE_PATH', ''),
-                        'protocol': os.environ.get('TYPESENSE_PROTOCOL', 'http'),
+                        'protocol': os.environ.get('TYPESENSE_PROTOCOL', None),
                     }
                 ],
                 'connection_timeout_seconds': 30 * 60,
