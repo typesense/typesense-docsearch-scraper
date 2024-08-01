@@ -34,6 +34,11 @@ jobs:
         with:
           python-version: "3.x"
       - run: touch .env
+      - run: |
+          echo "TYPESENSE_API_KEY=xyz
+          TYPESENSE_HOST=localhost
+          TYPESENSE_PORT=8108
+          TYPESENSE_PROTOCOL=http" > .env
       - name: Install dependencies
         run: |
           pip install pipenv
