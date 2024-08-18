@@ -26,6 +26,7 @@ class DocumentationSpider(CrawlSpider, SitemapSpider):
     """
     http_user = os.environ.get('DOCSEARCH_BASICAUTH_USERNAME', None)
     http_pass = os.environ.get('DOCSEARCH_BASICAUTH_PASSWORD', None)
+    http_auth_domain = os.environ.get('DOCSEARCH_AUTH_DOMAIN', None)
     typesense_helper = None
     strategy = None
     js_render = False
