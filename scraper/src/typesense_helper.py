@@ -3,7 +3,6 @@ Wrapper on top of the Typesense API client"""
 
 import json
 import os
-import pdb
 from builtins import range
 
 import typesense
@@ -188,13 +187,15 @@ class TypesenseHelper:
         """Update alias to point to new collection"""
         old_collection_name = self._get_old_collection_name()
 
+        if old_collection_name:
+            self._transfer_synonyms(old_collection_name)
+            self._transfer_overrides(old_collection_name)
+
         self.typesense_client.aliases.upsert(
             self.alias_name, {'collection_name': self.collection_name_tmp}
         )
 
         if old_collection_name:
-            self._transfer_synonyms(old_collection_name)
-            self._transfer_overrides(old_collection_name)
             self.typesense_client.collections[old_collection_name].delete()
 
     @staticmethod
