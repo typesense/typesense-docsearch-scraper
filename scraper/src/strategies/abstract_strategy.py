@@ -88,8 +88,7 @@ class AbstractStrategy:
             else:
                 yield '<' + node.tag + '>' + node.text + '</' + node.tag + '>'
         for e in node:
-            for s in AbstractStrategy.itertext(e):
-                yield s
+            yield from AbstractStrategy.itertext(e)
             if e.tail:
                 yield e.tail
 
