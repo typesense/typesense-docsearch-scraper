@@ -35,15 +35,8 @@ RUN apt-get update -y && apt-get install -yq \
 RUN curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add
 RUN echo "deb [arch=amd64]  https://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
 RUN apt-get update -y && apt-get install -yq \
-  google-chrome-stable=113.0.5672.126-1 \
+  google-chrome-stable=128.0.6613.84-1 \
   unzip
-RUN wget -q https://chromedriver.storage.googleapis.com/113.0.5672.63/chromedriver_linux64.zip
-RUN unzip chromedriver_linux64.zip
-RUN rm -f chromedriver_linux64.zip
-
-RUN mv chromedriver /usr/bin/chromedriver
-RUN chown root:root /usr/bin/chromedriver
-RUN chmod +x /usr/bin/chromedriver
 
 RUN wget -q https://github.com/SeleniumHQ/selenium/releases/download/selenium-4.4.0/selenium-server-4.4.0.jar
 RUN wget -q https://repo1.maven.org/maven2/org/testng/testng/7.6.1/testng-7.6.1.jar
