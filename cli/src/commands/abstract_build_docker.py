@@ -11,8 +11,13 @@ class AbstractBuildDocker(AbstractCommand):
             tag = AbstractBuildDocker.get_local_tag().decode()
             tags.append(image + ":" + tag)
 
-        cmd = ["docker", "build"] + [param for tag in tags for param in
+        cmd = ["docker", "buildx", "build"] + [param for tag in tags for param in
                                      ['-t', tag]] + ["-f", file, "."]
+        if local_tag:
+            cmd += ["--platform", "linux/amd64,linux/arm64", "--push"]
+        else:
+            cmd += ["--load"]
+
         return AbstractCommand.exec_shell_command(cmd)
 
     def get_options(self):
