@@ -6,6 +6,7 @@ class AbstractBuildDocker(AbstractCommand):
     def build_docker_file(file, image="typesense/docsearch-scraper-dev",
                           local_tag=False):
         tags = [image]
+        AbstractBuildDocker.setup_buildx()
 
         if local_tag:
             tag = AbstractBuildDocker.get_local_tag().decode()
@@ -30,3 +31,11 @@ class AbstractBuildDocker(AbstractCommand):
         from subprocess import check_output
         return check_output(
             ['git', 'describe', '--abbrev=0', '--tags']).strip()
+
+    @staticmethod
+    def setup_buildx():
+        from subprocess import check_output, CalledProcessError
+        try:
+            return check_output(['docker', 'buildx', 'use', 'typesense-builder']).strip()
+        except CalledProcessError:
+            return check_output(['docker', 'buildx', 'create', '--name', 'typesense-builder', '--driver', 'docker-container', '--use', '--bootstrap']).strip()
