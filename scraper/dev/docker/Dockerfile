@@ -1,4 +1,4 @@
-ARG SCRAPER_BASE_VERSION=0.9.1
+ARG SCRAPER_BASE_VERSION=latest
 FROM typesense/docsearch-scraper-base:$SCRAPER_BASE_VERSION
 LABEL maintainer="contact@typesense.org"
 
