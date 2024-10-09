@@ -1,4 +1,5 @@
-FROM --platform=linux/amd64 ubuntu:22.04
+# syntax=docker/dockerfile:1.4
+FROM debian:12-slim
 LABEL maintainer="contact@typesense.org"
 
 # Install selenium
@@ -14,8 +15,8 @@ WORKDIR /home/seleuser
 
 RUN apt-get update -y && apt-get install -yq \
     software-properties-common\
-    python3.10 
-RUN add-apt-repository -y ppa:openjdk-r/ppa
+    python3.11
+
 RUN apt-get update -y && apt-get install -yq \
     curl \
     wget \
@@ -31,12 +32,7 @@ RUN apt-get update -y && apt-get install -yq \
   libgconf-2-4 \
   default-jdk
 
-# https://www.ubuntuupdates.org/package/google_chrome/stable/main/base/google-chrome-stable for references around the latest versions
-RUN curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add
-RUN echo "deb [arch=amd64]  https://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
-RUN apt-get update -y && apt-get install -yq \
-  google-chrome-stable=128.0.6613.84-1 \
-  unzip
+RUN apt-get update -y && apt-get install -yq chromium-driver
 
 RUN wget -q https://github.com/SeleniumHQ/selenium/releases/download/selenium-4.4.0/selenium-server-4.4.0.jar
 RUN wget -q https://repo1.maven.org/maven2/org/testng/testng/7.6.1/testng-7.6.1.jar
@@ -50,7 +46,7 @@ ENV LANG C.UTF-8
 ENV PIPENV_HIDE_EMOJIS 1
 RUN apt-get update -y && apt-get install -yq \
     python3-pip
-RUN pip3 install pipenv
+RUN pip3 install pipenv --break-system-packages
 
 USER 1000
-RUN pipenv sync --python 3.10
+RUN pipenv sync --python 3.11

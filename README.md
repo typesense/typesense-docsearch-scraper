@@ -117,11 +117,11 @@ echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.
 echo 'eval "$(pyenv init -)"' >> ~/.bashrc
 source ~/.bashrc
 
-# Install Python 3.10 inside pyenv:
-pyenv install 3.10
+# Install Python 3.11 inside pyenv:
+pyenv install 3.11
 
 # Set the active version of Python:
-pyenv local 3.10
+pyenv local 3.11
 
 # Upgrade pip:
 pip install --upgrade pip
@@ -139,7 +139,7 @@ source ~/.bashrc
 
 # Ensure that you are in the "typesense-docsearch-scraper" directory.
 # Then, install the Python dependencies for this project:
-pipenv --python 3.10
+pipenv --python 3.11
 pipenv lock --clear
 pipenv install
 
@@ -148,7 +148,8 @@ pipenv shell
 
 # Build a new version of the base Docker container - ONLY NEEDED WHEN WE CHANGE DEPENDENCIES
 export SCRAPER_BASE_VERSION="0.8.0" # Only need to change this when we update dependencies
-docker buildx build -f ./scraper/dev/docker/Dockerfile.base -t typesense/docsearch-scraper-base:${SCRAPER_BASE_VERSION} .
+docker buildx use typesense-builder || docker buildx create --name typesense-builder --driver docker-container --use --bootstrap # use same buildx context for all containers to build
+docker buildx build --load -f ./scraper/dev/docker/Dockerfile.base -t typesense/docsearch-scraper-base:${SCRAPER_BASE_VERSION} .
 docker push typesense/docsearch-scraper-base:${SCRAPER_BASE_VERSION}
 docker tag typesense/docsearch-scraper-base:${SCRAPER_BASE_VERSION} typesense/docsearch-scraper-base:latest
 docker push typesense/docsearch-scraper-base:latest
@@ -156,6 +157,7 @@ docker push typesense/docsearch-scraper-base:latest
 # Build a new version of the scraper Docker container
 export SCRAPER_VERSION="0.9.1"
 export SCRAPER_BASE_VERSION="latest"
+docker buildx use typesense-builder || docker buildx create --name typesense-builder --driver docker-container --use --bootstrap # use same buildx context for all containers to build
 docker buildx build -f ./scraper/dev/docker/Dockerfile --build-arg SCRAPER_BASE_VERSION=${SCRAPER_BASE_VERSION} -t typesense/docsearch-scraper:${SCRAPER_VERSION} .
 docker push typesense/docsearch-scraper:${SCRAPER_VERSION}
 docker tag typesense/docsearch-scraper:${SCRAPER_VERSION} typesense/docsearch-scraper:latest

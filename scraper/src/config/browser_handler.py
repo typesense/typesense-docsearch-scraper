@@ -29,8 +29,15 @@ class BrowserHandler:
             chrome_options.add_argument('--headless')
             chrome_options.add_argument('user-agent={0}'.format(user_agent))
 
-            webdriver_service = Service(ChromeDriverManager().install())
-            driver = webdriver.Chrome(service=webdriver_service, options=chrome_options)
+            CHROMIUMDRIVER_PATH = os.environ.get('CHROMIUMDRIVER_PATH', "/usr/bin/chromedriver")
+
+            if os.path.isfile(CHROMIUMDRIVER_PATH):
+                webdriver_service = Service(executable_path=CHROMIUMDRIVER_PATH)
+                driver = webdriver.Chrome(service=webdriver_service, options=chrome_options)
+            else:
+                webdriver_service = Service(ChromeDriverManager().install())
+                driver = webdriver.Chrome(service=webdriver_service, options=chrome_options)
+
             CustomDownloaderMiddleware.driver = driver
             JsExecutor.driver = driver
         return driver
