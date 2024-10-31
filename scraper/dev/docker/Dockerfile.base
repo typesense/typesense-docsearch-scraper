@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.4
-FROM debian:12-slim
+FROM debian:bookworm-slim
 LABEL maintainer="contact@typesense.org"
 
 # Install selenium
