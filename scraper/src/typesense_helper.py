@@ -207,11 +207,12 @@ class TypesenseHelper:
             + transformed_record['weight']['position_descending']
         )
 
-        # Flatten nested hierarchy field
+        # Flatten nested hierarchy fields
         for x in range(0, 7):
-            if record['hierarchy'][f'lvl{x}'] is None:
-                continue
-            transformed_record[f'hierarchy.lvl{x}'] = record['hierarchy'][f'lvl{x}']
+            if record['hierarchy'][f'lvl{x}'] is not None:
+                transformed_record[f'hierarchy.lvl{x}'] = record['hierarchy'][f'lvl{x}']
+            if record['hierarchy_radio'][f'lvl{x}'] is not None:
+                transformed_record[f'hierarchy_radio.lvl{x}'] = record['hierarchy_radio'][f'lvl{x}']
 
         # Convert version to array
         if 'version' in record and type(record['version']) == str:
