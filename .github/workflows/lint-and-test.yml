@@ -8,7 +8,7 @@ jobs:
 
     strategy:
       matrix:
-        typesense-version: ["26.0"]
+        typesense-version: ["27.1"]
         typesense-port: ["8108"]
 
     steps:
