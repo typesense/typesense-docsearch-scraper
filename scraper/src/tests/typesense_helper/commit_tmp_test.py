@@ -19,6 +19,7 @@ expected_schema = {
             'optional': True,
             'sort': False,
             'stem': False,
+            'store': True,
             'type': 'string',
         },
         {
@@ -30,6 +31,7 @@ expected_schema = {
             'optional': True,
             'sort': False,
             'stem': False,
+            'store': True,
             'type': 'string',
         },
         {
@@ -41,6 +43,7 @@ expected_schema = {
             'optional': False,
             'sort': False,
             'stem': False,
+            'store': True,
             'type': 'string',
         },
         {
@@ -52,6 +55,7 @@ expected_schema = {
             'optional': True,
             'sort': False,
             'stem': False,
+            'store': True,
             'type': 'string',
         },
         {
@@ -63,6 +67,7 @@ expected_schema = {
             'optional': True,
             'sort': False,
             'stem': False,
+            'store': True,
             'type': 'string[]',
         },
         {
@@ -74,6 +79,7 @@ expected_schema = {
             'optional': True,
             'sort': False,
             'stem': False,
+            'store': True,
             'type': 'string',
         },
         {
@@ -85,6 +91,7 @@ expected_schema = {
             'optional': True,
             'sort': False,
             'stem': False,
+            'store': True,
             'type': 'string',
         },
         {
@@ -96,6 +103,7 @@ expected_schema = {
             'optional': True,
             'sort': False,
             'stem': False,
+            'store': True,
             'type': 'string',
         },
         {
@@ -107,6 +115,7 @@ expected_schema = {
             'optional': True,
             'sort': False,
             'stem': False,
+            'store': True,
             'type': 'string',
         },
         {
@@ -118,6 +127,7 @@ expected_schema = {
             'optional': True,
             'sort': False,
             'stem': False,
+            'store': True,
             'type': 'string',
         },
         {
@@ -129,6 +139,7 @@ expected_schema = {
             'optional': True,
             'sort': False,
             'stem': False,
+            'store': True,
             'type': 'string',
         },
         {
@@ -140,6 +151,7 @@ expected_schema = {
             'optional': True,
             'sort': False,
             'stem': False,
+            'store': True,
             'type': 'string',
         },
         {
@@ -151,6 +163,7 @@ expected_schema = {
             'optional': True,
             'sort': False,
             'stem': False,
+            'store': True,
             'type': 'string',
         },
         {
@@ -162,6 +175,7 @@ expected_schema = {
             'optional': True,
             'sort': False,
             'stem': False,
+            'store': True,
             'type': 'string',
         },
         {
@@ -173,6 +187,7 @@ expected_schema = {
             'optional': True,
             'sort': False,
             'stem': False,
+            'store': True,
             'type': 'string',
         },
         {
@@ -184,6 +199,7 @@ expected_schema = {
             'optional': True,
             'sort': False,
             'stem': False,
+            'store': True,
             'type': 'string[]',
         },
         {
@@ -195,6 +211,7 @@ expected_schema = {
             'optional': False,
             'sort': True,
             'stem': False,
+            'store': True,
             'type': 'int64',
         },
     ],
