@@ -56,15 +56,15 @@ class CustomDupeFilter(RFPDupeFilter):
             cache[include_headers] = fp.hexdigest()
         return cache[include_headers]
 
-    def __init__(self, path=None, debug=False, use_anchors=False):
-        super(CustomDupeFilter, self).__init__(path=path, debug=debug)
+    def __init__(self, path=None, debug=False, use_anchors=False, fingerprinter=None):
+        super(CustomDupeFilter, self).__init__(path=path, debug=debug, fingerprinter=fingerprinter)
         # Spread config bool
         self.use_anchors = use_anchors
         self.fingerprints_with_scheme = set()  # This set will not be scheme agnostic
 
     # Overridden method in order to add the use_anchors attribute
     @classmethod
-    def from_settings(cls, settings):
+    def from_settings(cls, settings, fingerprinter=None):
         debug = settings.getbool('DUPEFILTER_DEBUG')
         use_anchors = settings.getbool('DUPEFILTER_USE_ANCHORS')
         return cls(job_dir(settings), debug, use_anchors)
@@ -96,6 +96,8 @@ class CustomDupeFilter(RFPDupeFilter):
                 return True
             self.register_fingerprint(fp)
             self.fingerprints_with_scheme.add(fp_with_scheme)
+
+        return False
 
     def register_fingerprint(self, fp):
         self.fingerprints.add(fp)
