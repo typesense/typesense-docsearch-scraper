@@ -5,7 +5,7 @@
       "url": "https://typesense.org/docs/(?P<version>.*?)/",
       "variables": {
         "version": [
-          "0.21.0"
+          "27.1"
         ]
       }
     }
@@ -22,9 +22,13 @@
   },
   "scrape_start_urls": false,
   "strip_chars": " .,;:#",
-  "nb_hits": 505,
   "custom_settings": {
-    "token_separators": ["_"],
-    "symbols_to_index": ["*"]
-  }
+    "token_separators": [
+      "_"
+    ],
+    "symbols_to_index": [
+      "*"
+    ]
+  },
+  "nb_hits": 16502
 }

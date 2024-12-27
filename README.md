@@ -37,6 +37,13 @@ Remember to change the version numbers in the URL as needed.
 
 This section only applies if you're making changes to this scraper itself. If you only need to run the scraper, see Usage instructions above.
 
+#### Running the code locally
+
+```shellsession
+$ pipenv shell
+$ ./docsearch run configs/public/typesense_docs.json
+```
+
 #### Releasing a new version
 
 Basic/abbreviated instructions:
