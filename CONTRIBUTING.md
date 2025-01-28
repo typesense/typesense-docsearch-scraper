@@ -35,6 +35,19 @@ In case of Google Cloud Identity-Aware Proxy, please specify these env variables
 - `IAP_AUTH_CLIENT_ID` - # pick [client ID of the application](https://console.cloud.google.com/apis/credentials) you are connecting to
 - `IAP_AUTH_SERVICE_ACCOUNT_JSON` - # generate in [Actions](https://console.cloud.google.com/iam-admin/serviceaccounts) -> Create key -> JSON
 
+#### Custom headers
+
+Using `headers` configuration:
+
+```json
+{
+  "index_name": "my_index",
+  "headers": {
+    "Authorization": "Bearer <my_token>"
+   }
+},
+```
+
 ### Installing Chrome Headless
 
 Websites that need JavaScript for rendering are passed through ChromeDriver.
