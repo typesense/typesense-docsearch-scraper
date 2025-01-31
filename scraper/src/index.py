@@ -53,6 +53,9 @@ def run_config(config):
         "Accept-Language": "en",
     }  # Defaults for scrapy https://docs.scrapy.org/en/latest/topics/settings.html#default-request-headers
 
+    if config.headers is not None:
+        headers.update(config.headers)
+
     # Cloudflare Zero Trust (CF)
     if (os.getenv("CF_ACCESS_CLIENT_ID") and
         os.getenv("CF_ACCESS_CLIENT_SECRET")):

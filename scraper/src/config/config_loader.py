@@ -33,6 +33,7 @@ class ConfigLoader:
     index_name_tmp = None
     js_wait = 0
     js_render = False
+    headers = None
     keep_tags = []
     min_indexed_level = 0
     remove_get_params = False
