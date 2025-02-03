@@ -8,6 +8,9 @@ class HeaderInspectionMiddleware:
     Middleware to inspect headers of outgoing requests and incoming responses
     """
 
+    def __init__(self):
+        self.spider = None
+
     @classmethod
     def from_crawler(cls, crawler):
         middleware = cls()
@@ -21,5 +24,5 @@ class HeaderInspectionMiddleware:
         """
         This method is called for each request that goes through the download middleware.
         """
-        logging.debug(f"\nOutgoing request to: {request.url}")
-        logging.debug(f"\nHeaders: {request.headers}")
+        logging.debug("\nOutgoing request to: %s", request.url)
+        logging.debug("\nHeaders: %s", request.headers)
