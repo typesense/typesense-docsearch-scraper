@@ -16,7 +16,6 @@ from .strategies.default_strategy import DefaultStrategy
 from .custom_downloader_middleware import CustomDownloaderMiddleware
 from .custom_dupefilter import CustomDupeFilter
 from .config.browser_handler import BrowserHandler
-from .strategies.algolia_settings import AlgoliaSettings
 
 try:
     # disable boto (S3 download)
