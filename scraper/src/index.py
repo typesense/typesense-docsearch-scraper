@@ -14,6 +14,7 @@ from .config.config_loader import ConfigLoader
 from .documentation_spider import DocumentationSpider
 from .strategies.default_strategy import DefaultStrategy
 from .custom_downloader_middleware import CustomDownloaderMiddleware
+from .header_inspector_middleware import HeaderInspectionMiddleware
 from .custom_dupefilter import CustomDupeFilter
 from .config.browser_handler import BrowserHandler
 
@@ -45,6 +46,7 @@ def run_config(config):
 
     root_module = 'src.' if __name__ == '__main__' else 'scraper.src.'
     DOWNLOADER_MIDDLEWARES_PATH = root_module + 'custom_downloader_middleware.' + CustomDownloaderMiddleware.__name__
+    HEADER_MIDDLEWARES_PATH = root_module + 'header_inspector_middleware.' + HeaderInspectionMiddleware.__name__
     DUPEFILTER_CLASS_PATH = root_module + 'custom_dupefilter.' + CustomDupeFilter.__name__
 
     headers = {
@@ -97,7 +99,7 @@ def run_config(config):
         'LOG_ENABLED': '1',
         'LOG_LEVEL': 'ERROR',
         'USER_AGENT': config.user_agent,
-        'DOWNLOADER_MIDDLEWARES': {DOWNLOADER_MIDDLEWARES_PATH: 900},
+        'DOWNLOADER_MIDDLEWARES': {DOWNLOADER_MIDDLEWARES_PATH: 900, HEADER_MIDDLEWARES_PATH: 901},
         # Need to be > 600 to be after the redirectMiddleware
         'DUPEFILTER_USE_ANCHORS': config.use_anchors,
         # Use our custom dupefilter in order to be scheme agnostic regarding link provided
