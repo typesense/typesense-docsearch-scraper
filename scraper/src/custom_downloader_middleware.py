@@ -3,9 +3,11 @@ CustomDownloaderMiddleware
 """
 
 import time
+from urllib.parse import unquote_plus, urlparse
 
 from scrapy.http import HtmlResponse
-from urllib.parse import urlparse, unquote_plus
+from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.support.ui import WebDriverWait
 
 
 class CustomDownloaderMiddleware:
@@ -27,15 +29,17 @@ class CustomDownloaderMiddleware:
 
         self.driver.get(unquote_plus(
             request.url))  # Decode url otherwise firefox is not happy. Ex /#%21/ => /#!/%21
-        time.sleep(spider.js_wait)
-        body = self.driver.page_source.encode('utf-8')
-        url = self.driver.current_url
 
-        return HtmlResponse(
-            url=url,
-            body=body,
-            encoding='utf8'
-        )
+        try:
+            # Wait for DOM ready
+            WebDriverWait(self.driver, 10).until(
+                lambda d: d.execute_script("return document.readyState") == "complete"
+            )
+        except TimeoutException:
+            time.sleep(spider.js_wait)
+
+        body = self.driver.page_source.encode("utf-8")
+        return HtmlResponse(url=self.driver.current_url, body=body, encoding="utf8")
 
     def process_response(self, request, response, spider):
         # Since scrappy use start_urls and stop_urls before creating the request
@@ -47,7 +51,7 @@ class CustomDownloaderMiddleware:
             url_without_params = o.scheme + "://" + o.netloc + o.path
             response = response.replace(url=url_without_params)
 
-        if response.url == request.url + '#':
+        if response.url == request.url + "#":
             response = response.replace(url=request.url)
 
         return response
