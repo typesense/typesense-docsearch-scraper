@@ -25,6 +25,7 @@ class TypesenseHelper:
                     }
                 ],
                 'connection_timeout_seconds': 30 * 60,
+                'verify': os.environ.get('TYPESENSE_VERIFY', True),
             }
         )
         self.alias_name = alias_name
