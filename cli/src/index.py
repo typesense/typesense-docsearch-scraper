@@ -38,6 +38,9 @@ if not path.isfile(env_file):
     ans = input("What is your TYPESENSE_PROTOCOL (http|https): ")
     f.write("TYPESENSE_PROTOCOL=" + ans + "\n")
 
+    ans = input("What is your TYPESENSE_VERIFY (true|false): ")
+    f.write("TYPESENSE_VERIFY=" + ans + "\n")
+
     f.close()
 
     print("")
