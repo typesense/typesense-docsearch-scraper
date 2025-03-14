@@ -15,9 +15,9 @@ pytest = "==8.3.3"
 requests-iap = "==0.2.0"
 python-helpscout-v2 = "==2.0.0"
 algoliasearch = "==2.6.3"
-typesense = "==0.10.0"
 python-keycloak-client = "==0.2.3"
 webdriver-manager = "==4.0.2"
+typesense = "==0.20.0"
 
 [dev-packages]
 pylint = "==3.2.6"
