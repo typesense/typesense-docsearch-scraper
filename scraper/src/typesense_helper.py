@@ -163,7 +163,7 @@ class TypesenseHelper:
             result = self.typesense_client.collections[
                 self.collection_name_tmp
             ].documents.import_(transformed_records[i : i + 50])
-            
+
             # Check for failed items directly without double-decoding
             failed_items = [
                 r for r in result if r.get('success') is False
