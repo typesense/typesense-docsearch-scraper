@@ -163,14 +163,12 @@ class TypesenseHelper:
             result = self.typesense_client.collections[
                 self.collection_name_tmp
             ].documents.import_(transformed_records[i : i + 50])
-            failed_items = list(
-                map(
-                    lambda r: json.loads(json.loads(r)),
-                    filter(
-                        lambda r: json.loads(json.loads(r))['success'] is False, result
-                    ),
-                )
-            )
+            
+             # Check for failed items directly without double-decoding
+            failed_items = [
+                r for r in result if r.get('success') is False
+            ]
+        
             if len(failed_items) > 0:
                 print(failed_items)
                 raise Exception
