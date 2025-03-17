@@ -168,7 +168,6 @@ class TypesenseHelper:
             failed_items = [
                 r for r in result if r.get('success') is False
             ]
-        
             if len(failed_items) > 0:
                 print(failed_items)
                 raise Exception
