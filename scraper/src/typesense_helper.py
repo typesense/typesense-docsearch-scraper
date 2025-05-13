@@ -153,6 +153,10 @@ class TypesenseHelper:
             if field_definitions is not None:
                 schema['fields'] = field_definitions
 
+            enable_nested_fields = self.custom_settings.get('enable_nested_fields', None)
+            if enable_nested_fields is not None:
+                schema['enable_nested_fields'] = enable_nested_fields
+
         self.typesense_client.collections.create(schema)
 
     def add_records(self, records, url, from_sitemap):
