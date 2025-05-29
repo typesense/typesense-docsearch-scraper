@@ -28,6 +28,7 @@ class ConfigLoader:
     api_key = None
     app_id = None
     custom_settings = None
+    dns_resolver = 'scrapy.resolver.CachingThreadedResolver'
     extra_records = []
     index_name = None
     index_name_tmp = None
