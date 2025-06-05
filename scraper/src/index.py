@@ -95,7 +95,7 @@ def run_config(config):
 
     DEFAULT_REQUEST_HEADERS = headers
 
-    process = CrawlerProcess({
+    crawler_settings = {
         'LOG_ENABLED': '1',
         'LOG_LEVEL': 'ERROR',
         'USER_AGENT': config.user_agent,
@@ -105,9 +105,13 @@ def run_config(config):
         # Use our custom dupefilter in order to be scheme agnostic regarding link provided
         'DUPEFILTER_CLASS': DUPEFILTER_CLASS_PATH,
         'DEFAULT_REQUEST_HEADERS': DEFAULT_REQUEST_HEADERS,
-        'TELNETCONSOLE_ENABLED': False,
-        'DNS_RESOLVER': config.dns_resolver
-    })
+        'TELNETCONSOLE_ENABLED': False
+    }
+
+    if config.dns_resolver is not None:
+        crawler_settings['DNS_RESOLVER'] = config.dns_resolver
+
+    process = CrawlerProcess(crawler_settings)
 
     process.crawl(
         DocumentationSpider,
