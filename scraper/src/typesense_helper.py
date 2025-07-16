@@ -24,7 +24,8 @@ class TypesenseHelper:
                         'protocol': os.environ.get('TYPESENSE_PROTOCOL', None),
                     }
                 ],
-                'connection_timeout_seconds': 30 * 60,
+                'connection_timeout_seconds': int(os.environ.get('TYPESENSE_CONNECTION_TIMEOUT_SECONDS', 30 * 60)),
+                'retry_interval_seconds': int(os.environ.get('TYPESENSE_RETRY_INTERVAL_SECONDS', 1)),
                 'verify': os.environ.get('TYPESENSE_VERIFY', 'True').lower() == 'true',
             }
         )
