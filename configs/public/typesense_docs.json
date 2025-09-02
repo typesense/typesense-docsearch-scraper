@@ -20,6 +20,8 @@
       "text": ".content__default p, .content__default ul li, .content__default table tbody tr"
     }
   },
+  "buffer_size_limit": 5000,
+  "flush_interval_seconds": 1,
   "scrape_start_urls": false,
   "strip_chars": " .,;:#",
   "custom_settings": {

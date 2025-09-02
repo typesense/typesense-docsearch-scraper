@@ -41,8 +41,8 @@ def run_config(config):
         config.index_name,
         config.index_name_tmp,
         config.custom_settings,
-        1000,
-        60
+        config.buffer_size_limit,
+        config.flush_interval_seconds,
     )
     typesense_helper.create_tmp_collection()
 
