@@ -40,7 +40,9 @@ def run_config(config):
     typesense_helper = TypesenseHelper(
         config.index_name,
         config.index_name_tmp,
-        config.custom_settings
+        config.custom_settings,
+        1000,
+        60
     )
     typesense_helper.create_tmp_collection()
 

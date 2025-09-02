@@ -4,6 +4,7 @@ Wrapper on top of the Typesense API client"""
 import json
 import os
 from builtins import range
+import time
 
 import typesense
 from typesense import exceptions
@@ -12,7 +13,7 @@ from typesense import exceptions
 class TypesenseHelper:
     """TypesenseHelper"""
 
-    def __init__(self, alias_name, collection_name_tmp, custom_settings):
+    def __init__(self, alias_name, collection_name_tmp, custom_settings, buffer_size_limit, flush_interval_seconds):
         self.typesense_client = typesense.Client(
             {
                 'api_key': os.environ.get('TYPESENSE_API_KEY', None),
@@ -35,6 +36,15 @@ class TypesenseHelper:
         self.collection_name_tmp = collection_name_tmp
         self.collection_locale = os.environ.get('TYPESENSE_COLLECTION_LOCALE', 'en')
         self.custom_settings = custom_settings
+        self.buffer_size_limit = buffer_size_limit
+        self.flush_interval_seconds = flush_interval_seconds
+
+        print(f'\033[93m> DocSearch: Batching config - buffer_size_limit: {self.buffer_size_limit}, flush_interval_seconds: {self.flush_interval_seconds}\033[0m')
+
+        # buffer for batching records
+        self.records_buffer = []
+        self.buffer_stats = {"total_records": 0, "urls_processed": 0}
+        self.last_flush_time = time.time()
 
     def create_tmp_collection(self):
         """Create a temporary index to add records to"""
@@ -163,33 +173,73 @@ class TypesenseHelper:
         self.typesense_client.collections.create(schema)
 
     def add_records(self, records, url, from_sitemap):
-        """Add new records to the temporary index"""
+        """Add new records to the buffer and flush based on size/time thresholds"""
         transformed_records = list(map(TypesenseHelper.transform_record, records))
         record_count = len(transformed_records)
 
-        for i in range(0, record_count, 50):
-            result = self.typesense_client.collections[
-                self.collection_name_tmp
-            ].documents.import_(transformed_records[i : i + 50])
+        # Add to buffer
+        self.records_buffer.extend(transformed_records)
+        self.buffer_stats["total_records"] += record_count
+        self.buffer_stats["urls_processed"] += 1
 
-            # Check for failed items directly without double-decoding
-            failed_items = [
-                r for r in result if r.get('success') is False
-            ]
-            if len(failed_items) > 0:
-                print(failed_items)
-                raise Exception
+        current_time = time.time()
+
+        flush = {
+            'should_flush': False,
+            'reason': ''
+        }
+
+
+        # Check size-based flush
+        if len(self.records_buffer) >= self.buffer_size_limit:
+            flush['should_flush'] = True
+            flush['reason'] = f"buffer size ({len(self.records_buffer)} >= {self.buffer_size_limit})"
+
+        # Check time-based flush
+        elif current_time - self.last_flush_time >= self.flush_interval_seconds and self.records_buffer:
+            flush['should_flush'] = True
+            flush['reason'] = f"time interval ({self.flush_interval_seconds}s)"
+
+        if flush['should_flush']:
+            self._flush_buffer(flush.get('reason', "unknown reason"))
 
         color = "96" if from_sitemap else "94"
-
         print(
-            '\033[{}m> DocSearch: \033[0m{}\033[93m {} records\033[0m)'.format(
-                color, url, record_count
+            "\033[{}m> DocSearch: \033[0m{}\033[93m {} records (buffered: {})\033[0m".format(
+                color, url, record_count, len(self.records_buffer)
             )
         )
 
+    def _flush_buffer(self, reason):
+        """Send buffered records to Typesense"""
+        if not self.records_buffer:
+            return
+
+        print(
+            f'\033[94m> DocSearch: Flushing {len(self.records_buffer)} records from {self.buffer_stats["urls_processed"]} URLs (Reason: {reason})\033[0m'
+        )
+
+        result = self.typesense_client.collections[
+            self.collection_name_tmp
+        ].documents.import_(self.records_buffer)
+
+        failed_items = [r for r in result if r.get("success") is False]
+        if len(failed_items) > 0:
+            print(failed_items)
+            raise Exception
+
+        print(
+            f"\033[94m> DocSearch: Successfully imported {len(self.records_buffer)} records\033[0m"
+        )
+
+        self.records_buffer = []
+        self.last_flush_time = time.time()
+
     def commit_tmp_collection(self):
         """Update alias to point to new collection"""
+        if self.records_buffer:
+            self._flush_buffer("commit_tmp_collection")
+
         old_collection_name = self._get_old_collection_name()
 
         if old_collection_name:
