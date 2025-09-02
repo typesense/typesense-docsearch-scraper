@@ -27,6 +27,8 @@ class ConfigLoader:
     allowed_domains = None
     api_key = None
     app_id = None
+    buffer_size_limit = 1000
+    flush_interval_seconds = 60
     custom_settings = None
     dns_resolver = None
     extra_records = []
@@ -119,6 +121,11 @@ class ConfigLoader:
         if self.index_name_tmp is None:
             self.index_name_tmp = os.environ.get('INDEX_NAME_TMP',
                                                  f'{self.index_name}_{int(datetime.now().timestamp())}')
+        if self.buffer_size_limit is None:
+            self.buffer_size_limit = os.environ.get('TYPESENSE_BUFFER_SIZE_LIMIT', 1000)
+
+        if self.flush_interval_seconds is None:
+            self.flush_interval_seconds = os.environ.get('TYPESENSE_FLUSH_INTERVAL_SECONDS', 60)
 
         # Parse config
         self.selectors = SelectorsParser().parse(self.selectors)

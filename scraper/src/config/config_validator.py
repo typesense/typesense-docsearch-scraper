@@ -62,3 +62,15 @@ class ConfigValidator:
         if self.config.nb_hits_max and not isinstance(self.config.nb_hits_max,
                                                       int):
             raise Exception('nb_hits_max should be integer')
+
+        if self.config.buffer_size_limit is not None and not isinstance(self.config.buffer_size_limit, int):
+            raise Exception('buffer_size_limit should be an integer')
+
+        if self.config.buffer_size_limit is not None and not self.config.buffer_size_limit > 0:
+            raise Exception('buffer_size_limit should be a positive integer')
+
+        if self.config.flush_interval_seconds is not None and not isinstance(self.config.flush_interval_seconds, int):
+            raise Exception('flush_interval_seconds should be an integer')
+
+        if self.config.flush_interval_seconds is not None and not self.config.flush_interval_seconds > 0:
+            raise Exception('flush_interval_seconds should be a positive integer')

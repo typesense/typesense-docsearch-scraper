@@ -261,7 +261,7 @@ def typesense_client():
 def test_create_tmp_collection(typesense_client):
     """Test that a temporary collection is created with the expected schema"""
     # Arrange
-    original_helper = TypesenseHelper('test_alias', 'collection', {})
+    original_helper = TypesenseHelper('test_alias', 'collection', {}, 1000, 60)
     original_helper.create_tmp_collection()
 
     # Act
@@ -305,7 +305,7 @@ def test_create_tmp_collection_already_exists(typesense_client):
             'token_separators': ['_', '-'],
         }
     )
-    original_helper = TypesenseHelper('test_alias', 'collection', {})
+    original_helper = TypesenseHelper('test_alias', 'collection', {}, 1000, 60)
     original_helper.create_tmp_collection()
 
     # Act
@@ -458,7 +458,7 @@ def test_add_records(typesense_client):
     url = "http://example.com"
     from_sitemap = True
 
-    helper = TypesenseHelper('test_alias', 'collection', {})
+    helper = TypesenseHelper('test_alias', 'collection', {}, 1, 60)
     helper.create_tmp_collection()
 
     # Call the method under test
@@ -615,7 +615,7 @@ def test_commit_tmp_collection(typesense_client):
     url = "http://example.com"
     from_sitemap = True
 
-    helper = TypesenseHelper('test_alias', 'collection', {})
+    helper = TypesenseHelper('test_alias', 'collection', {}, 1000, 60)
     helper.create_tmp_collection()
 
     original_synonyms = typesense_client.collections['collection'].synonyms.retrieve()[
@@ -630,7 +630,7 @@ def test_commit_tmp_collection(typesense_client):
     helper.commit_tmp_collection()
 
     # Act
-    tmp_collection_helper = TypesenseHelper('test_alias', 'collection_tmp', {})
+    tmp_collection_helper = TypesenseHelper('test_alias', 'collection_tmp', {}, 1000, 60)
     tmp_collection_helper.create_tmp_collection()
     tmp_collection_helper.add_records(records, url, from_sitemap)
     tmp_collection_helper.commit_tmp_collection()
@@ -728,7 +728,7 @@ def test_commit_tmp_collection_with_curation_rules(typesense_client):
     url = "http://example.com"
     from_sitemap = True
 
-    helper = TypesenseHelper('test_alias_curation', 'collection', {})
+    helper = TypesenseHelper('test_alias_curation', 'collection', {}, 1000, 60)
     helper.create_tmp_collection()
 
     override = {
@@ -757,7 +757,7 @@ def test_commit_tmp_collection_with_curation_rules(typesense_client):
 
     # Act
     tmp_collection_helper = TypesenseHelper(
-        'test_alias_curation', 'collection_tmp_curation', {}
+        'test_alias_curation', 'collection_tmp_curation', {}, 1000, 60
     )
     tmp_collection_helper.create_tmp_collection()
     tmp_collection_helper.add_records(records, url, from_sitemap)

@@ -40,7 +40,9 @@ def run_config(config):
     typesense_helper = TypesenseHelper(
         config.index_name,
         config.index_name_tmp,
-        config.custom_settings
+        config.custom_settings,
+        config.buffer_size_limit,
+        config.flush_interval_seconds,
     )
     typesense_helper.create_tmp_collection()
 

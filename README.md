@@ -198,3 +198,42 @@ git push --follow-tags
 ## Help
 
 If you have any questions or run into any problems, please create a Github issue and we'll try our best to help.
+
+## Configurable Batching
+
+The scraper now supports configurable batching to control the rate and size of data sent to Typesense. This helps prevent overwhelming the Typesense server with too many small requests.
+
+### Configuration Options
+
+You can configure batching using either **JSON config files** or **environment variables**.
+
+#### JSON Config File
+
+Add these parameters to your JSON configuration file:
+
+```json
+{
+  "index_name": "my_docs",
+  "batch_size": 400,
+  "buffer_size_limit": 100,
+  "flush_interval_seconds": 60,
+  "start_urls": [...],
+  "selectors": {...}
+}
+```
+
+#### Environment Variables
+
+Set these environment variables to configure batching behavior:
+
+- `TYPESENSE_BUFFER_SIZE_LIMIT`: Maximum number of records to buffer before flushing (default: batch_size \* 2)
+- `TYPESENSE_FLUSH_INTERVAL_SECONDS`: Time interval in seconds to flush buffered records (default: 60)
+
+### How It Works
+
+The scraper will flush records to Typesense when either:
+
+1. The buffer reaches the size limit (`buffer_size_limit`)
+2. The time interval has elapsed (`flush_interval_seconds`)
+
+This ensures a controlled, predictable rate of data ingestion that won't overwhelm your Typesense server.
