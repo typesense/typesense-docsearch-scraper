@@ -21,6 +21,7 @@ typesense = ">=1.2.0"
 
 [dev-packages]
 pylint = "==3.2.6"
+tomli = "*"
 
 [requires]
 python_version = "3.10"
