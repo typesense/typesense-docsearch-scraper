@@ -48,7 +48,7 @@ class TypesenseHelper:
         except exceptions.ObjectNotFound:
             pass
 
-        general_schema = {
+        schema = {
             "name": self.collection_name_tmp,
             "fields": [
                 {"name": "anchor", "type": "string", "optional": True},
@@ -148,26 +148,6 @@ class TypesenseHelper:
             "token_separators": ["_", "-"],
         }
 
-        if self.typesense_version >= 30:
-            try:
-                old_collection = self.typesense_client.collections[
-                    self.collection_name_tmp
-                ].retrieve()
-                curation_sets = old_collection.get("curation_sets", [])
-
-                synonym_sets = old_collection.get("synonym_sets", [])
-            except exceptions.ObjectNotFound:
-                curation_sets = []
-                synonym_sets = []
-
-            schema = {
-                **general_schema,
-                "curation_sets": curation_sets,
-                "synonym_sets": synonym_sets,
-            }
-        else:
-            schema = general_schema
-
         if self.custom_settings is not None:
             token_separators = self.custom_settings.get('token_separators', None)
             if token_separators is not None:
@@ -264,6 +244,14 @@ class TypesenseHelper:
     def _transfer_synonyms(self, old_collection_name):
         """Transfer synonyms from old collection to new collection"""
         if self.typesense_version >= 30:
+            synonyms = (
+                self.typesense_client.collections[old_collection_name]
+                .retrieve()
+                .get("synonym_sets", [])
+            )
+            self.typesense_client.collections[self.collection_name_tmp].update(
+                "synonym_sets", synonyms
+            )
             return
 
         synonyms = (
@@ -280,6 +268,14 @@ class TypesenseHelper:
     def _transfer_overrides(self, old_collection_name):
         """Transfer overrides from old collection to new collection"""
         if self.typesense_version >= 30:
+            curation_sets = (
+                self.typesense_client.collections[old_collection_name]
+                .retrieve()
+                .get("curation_sets", [])
+            )
+            self.typesense_client.collections[self.collection_name_tmp].update(
+                "curation_sets", curation_sets
+            )
             return
 
         overrides = (
