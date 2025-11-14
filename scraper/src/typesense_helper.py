@@ -250,7 +250,7 @@ class TypesenseHelper:
                 .get("synonym_sets", [])
             )
             self.typesense_client.collections[self.collection_name_tmp].update(
-                "synonym_sets", synonyms
+                {"synonym_sets": synonyms}
             )
             return
 
@@ -274,7 +274,7 @@ class TypesenseHelper:
                 .get("curation_sets", [])
             )
             self.typesense_client.collections[self.collection_name_tmp].update(
-                "curation_sets", curation_sets
+                {"curation_sets": curation_sets}
             )
             return
 
