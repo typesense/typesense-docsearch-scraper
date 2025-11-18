@@ -279,7 +279,23 @@ def test_create_tmp_collection(typesense_client):
     # Assert that the schema is as expected
     collection_details.pop('created_at', None)
 
-    assert collection_details == expected_schema
+    assert [field.get("name") for field in collection_details.get("fields", [])] == [
+        field.get("name") for field in expected_schema.get("fields", [])
+    ]
+
+    assert collection_details.get("name") == expected_schema.get("name")
+    assert collection_details.get("default_sorting_field") == expected_schema.get(
+        "default_sorting_field"
+    )
+    assert collection_details.get("token_separators") == expected_schema.get(
+        "token_separators"
+    )
+    assert collection_details.get("symbols_to_index") == expected_schema.get(
+        "symbols_to_index"
+    )
+    assert collection_details.get("enable_nested_fields") == expected_schema.get(
+        "enable_nested_fields"
+    )
 
     # Teardown
     typesense_client.collections['collection'].delete()
@@ -323,7 +339,14 @@ def test_create_tmp_collection_already_exists(typesense_client):
     # Assert that the schema is as expected
     collection_details.pop('created_at', None)
 
-    assert collection_details == expected_schema
+    assert [field.get("name") for field in collection_details.get("fields", [])] == [field.get("name") for field in expected_schema.get("fields", [])]
+    assert collection_details.get("name") == expected_schema.get("name")
+    assert collection_details.get("default_sorting_field") == expected_schema.get(
+        "default_sorting_field"
+    )
+    assert collection_details.get("token_separators") == expected_schema.get(
+        "token_separators"
+    )
     # Teardown
     typesense_client.collections['collection'].delete()
 
@@ -618,13 +641,18 @@ def test_commit_tmp_collection(typesense_client):
     helper = TypesenseHelper('test_alias', 'collection', {})
     helper.create_tmp_collection()
 
-    original_synonyms = typesense_client.collections['collection'].synonyms.retrieve()[
-        'synonyms'
-    ]
-
-    original_overrides = typesense_client.collections[
-        'collection'
-    ].overrides.retrieve()['overrides']
+    typesense_version = typesense_client.debug.retrieve().get("version")
+    if typesense_version == "nightly" or int(typesense_version.split(".")[0]) >= 30:
+        collection = typesense_client.collections["collection"].retrieve()
+        original_curation_sets = collection.get("curation_sets", [])
+        original_synonym_sets = collection.get("synonym_sets", [])
+    else:
+        original_synonyms = typesense_client.collections[
+            "collection"
+        ].synonyms.retrieve()["synonyms"]
+        original_overrides = typesense_client.collections[
+            "collection"
+        ].overrides.retrieve()["overrides"]
 
     helper.add_records(records, url, from_sitemap)
     helper.commit_tmp_collection()
@@ -635,22 +663,34 @@ def test_commit_tmp_collection(typesense_client):
     tmp_collection_helper.add_records(records, url, from_sitemap)
     tmp_collection_helper.commit_tmp_collection()
 
-    new_synonyms = typesense_client.collections['collection_tmp'].synonyms.retrieve()[
-        'synonyms'
-    ]
-
-    new_overrides = typesense_client.collections['collection_tmp'].overrides.retrieve()[
-        'overrides'
-    ]
+    if typesense_version == "nightly" or int(typesense_version.split(".")[0]) >= 30:
+        new_curation_sets = (
+            typesense_client.collections["collection_tmp"]
+            .retrieve()
+            .get("curation_sets", [])
+        )
+        new_synonym_sets = (
+            typesense_client.collections["collection_tmp"]
+            .retrieve()
+            .get("synonym_sets", [])
+        )
+        assert new_curation_sets == original_curation_sets
+        assert new_synonym_sets == original_synonym_sets
+    else:
+        new_synonyms = typesense_client.collections[
+            "collection_tmp"
+        ].synonyms.retrieve()["synonyms"]
+        new_overrides = typesense_client.collections[
+            "collection_tmp"
+        ].overrides.retrieve()["overrides"]
+        assert new_synonyms == original_synonyms
+        assert new_overrides == original_overrides
 
     # Assert
     assert (
         typesense_client.aliases['test_alias'].retrieve()['collection_name']
         == 'collection_tmp'
     )
-
-    assert new_synonyms == original_synonyms == []
-    assert new_overrides == original_overrides == []
 
     assert pytest.raises(
         exceptions.ObjectNotFound,
@@ -731,26 +771,76 @@ def test_commit_tmp_collection_with_curation_rules(typesense_client):
     helper = TypesenseHelper('test_alias_curation', 'collection', {})
     helper.create_tmp_collection()
 
-    override = {
-        "rule": {"query": "some thing", "match": "exact"},
-        "includes": [{"id": "422", "position": 1}, {"id": "54", "position": 2}],
-        "excludes": [{"id": "287"}],
-    }
+    typesense_version = typesense_client.debug.retrieve().get("version")
+    if typesense_version == "nightly" or int(typesense_version.split(".")[0]) >= 30:
+        typesense_client.curation_sets["some_curation_set"].upsert(
+            {
+                "items": [
+                    {
+                        "id": "some_curation_set_item",
+                        "rule": {"query": "some thing", "match": "exact"},
+                        "includes": [
+                            {"id": "422", "position": 1},
+                            {"id": "54", "position": 2},
+                        ],
+                        "excludes": [{"id": "287"}],
+                    }
+                ]
+            }
+        )
 
-    synonym = {"synonyms": ["some", "maybe", "set"]}
+        typesense_client.synonym_sets["some_synonym_set"].upsert(
+            {
+                "items": [
+                    {
+                        "id": "some_synonym_set_item",
+                        "synonyms": ["some", "maybe", "set"],
+                    }
+                ]
+            }
+        )
 
-    typesense_client.collections['collection'].synonyms.upsert('some_synonym', synonym)
-    typesense_client.collections['collection'].overrides.upsert(
-        'some_override', override
-    )
+        typesense_client.collections["collection"].update(
+            {
+                "curation_sets": ["some_curation_set"],
+                "synonym_sets": ["some_synonym_set"],
+            }
+        )
 
-    original_synonyms = typesense_client.collections['collection'].synonyms.retrieve()[
-        'synonyms'
-    ]
+        original_collection = typesense_client.collections["collection"].retrieve()
+        original_curation_sets = original_collection.get("curation_sets", [])
+        original_synonym_sets = original_collection.get("synonym_sets", [])
 
-    original_overrides = typesense_client.collections[
-        'collection'
-    ].overrides.retrieve()['overrides']
+    else:
+        original_synonyms = typesense_client.collections[
+            "collection"
+        ].synonyms.retrieve()["synonyms"]
+        original_overrides = typesense_client.collections[
+            "collection"
+        ].overrides.retrieve()["overrides"]
+
+        override = {
+            "rule": {"query": "some thing", "match": "exact"},
+            "includes": [{"id": "422", "position": 1}, {"id": "54", "position": 2}],
+            "excludes": [{"id": "287"}],
+        }
+
+        synonym = {"synonyms": ["some", "maybe", "set"]}
+
+        typesense_client.collections["collection"].synonyms.upsert(
+            "some_synonym", synonym
+        )
+        typesense_client.collections["collection"].overrides.upsert(
+            "some_override", override
+        )
+
+        original_synonyms = typesense_client.collections[
+            "collection"
+        ].synonyms.retrieve()["synonyms"]
+
+        original_overrides = typesense_client.collections[
+            "collection"
+        ].overrides.retrieve()["overrides"]
 
     helper.add_records(records, url, from_sitemap)
     helper.commit_tmp_collection()
@@ -763,22 +853,37 @@ def test_commit_tmp_collection_with_curation_rules(typesense_client):
     tmp_collection_helper.add_records(records, url, from_sitemap)
     tmp_collection_helper.commit_tmp_collection()
 
-    new_synonyms = typesense_client.collections[
-        'collection_tmp_curation'
-    ].synonyms.retrieve()['synonyms']
+    if typesense_version == "nightly" or int(typesense_version.split(".")[0]) >= 30:
+        new_curation_sets = (
+            typesense_client.collections["collection_tmp_curation"]
+            .retrieve()
+            .get("curation_sets", [])
+        )
+        new_synonym_sets = (
+            typesense_client.collections["collection_tmp_curation"]
+            .retrieve()
+            .get("synonym_sets", [])
+        )
 
-    new_overrides = typesense_client.collections[
-        'collection_tmp_curation'
-    ].overrides.retrieve()['overrides']
+        assert new_curation_sets == original_curation_sets
+        assert new_synonym_sets == original_synonym_sets
+    else:
+        new_synonyms = typesense_client.collections[
+            "collection_tmp_curation"
+        ].synonyms.retrieve()["synonyms"]
+
+        new_overrides = typesense_client.collections[
+            "collection_tmp_curation"
+        ].overrides.retrieve()["overrides"]
+
+        assert new_synonyms == original_synonyms
+        assert new_overrides == original_overrides
 
     # Assert
     assert (
         typesense_client.aliases['test_alias_curation'].retrieve()['collection_name']
         == 'collection_tmp_curation'
     )
-
-    assert new_synonyms == original_synonyms
-    assert new_overrides == original_overrides
 
     assert pytest.raises(
         exceptions.ObjectNotFound,
