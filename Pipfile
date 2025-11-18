@@ -17,7 +17,7 @@ python-helpscout-v2 = "==2.0.0"
 algoliasearch = "==2.6.3"
 python-keycloak-client = "==0.2.3"
 webdriver-manager = "==4.0.2"
-typesense = ">=1.2.0"
+typesense = "*"
 
 [dev-packages]
 pylint = "==3.2.6"
