@@ -27,8 +27,9 @@ class CustomDownloaderMiddleware:
 
         print("Getting " + request.url + " from selenium")
 
-        self.driver.get(unquote_plus(
-            request.url))  # Decode url otherwise firefox is not happy. Ex /#%21/ => /#!/%21
+        self.driver.get(
+            unquote_plus(request.url)
+        )  # Decode url otherwise firefox is not happy. Ex /#%21/ => /#!/%21
 
         try:
             # Wait for DOM ready
@@ -36,6 +37,9 @@ class CustomDownloaderMiddleware:
                 lambda d: d.execute_script("return document.readyState") == "complete"
             )
         except TimeoutException:
+            pass
+
+        if spider.js_wait:
             time.sleep(spider.js_wait)
 
         body = self.driver.page_source.encode("utf-8")
