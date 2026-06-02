@@ -30,7 +30,8 @@ Remember to change the version numbers in the URL as needed.
 
 | typesense-docsearch-scraper | typesense-server |
 | --- | --- |
-| 0.5.0 | >= 0.22.1 |
+| 0.12.0 | >= 30.0 |
+| 0.5.0 to 0.11.0 | >= 0.22.1 |
 | 0.4.x and below | >= 0.21.0  |
 
 ## Development Workflow
